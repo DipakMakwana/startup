@@ -1,0 +1,44 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  errors:
+    messages:
+      carrierwave_processing_error: 'Cannot resize image.'
+      carrierwave_integrity_error: 'Not an image.'
+      carrierwave_download_error: "Couldn't download image."
+  unauthorized:
+    manage:
+      all: "Not authorized to %{action} %{subject}."
+      user: "You're not allowed to edit other user accounts."
+    new:
+      startup: "Sorry but registration is closed. Email Joe if you're interested in joining: joe@nReduce.com"
+      checkin: "Sorry you've missed the check-in times."
+      meeting_message: "Only the organizer is allowed to message the attendees."
+    create:
+      startup: "Sorry but registration is closed. Email Joe if you're interested in joining: joe@nReduce.com"
+    update:
+      project: "Not allowed to update this project."
+    accept:
+      invite: "Sorry, that is not a valid invite."
+    invite_mentor:
+      startup: "Sorry but you must pass all requirements, and are limited to invite one mentor per week."
+    see_mentor_page:
+      user: "Sorry but you can't see the mentor area as you don't have a startup or aren't a mentor."
+    search_mentors:
+      user: "Sorry but you need to be an nReduce mentor to see other mentors."
+    change_mentor_status:
+      user: "You must currently be a mentor to change your mentor status."
+    see_investor_page:
+      user: "You don't have privileges to view the investor area."
+    see_ratings_page:
+      user: "You don't have privileges to rate startups."
+    index:
+      rating: "You need to set your startup as investable to see investor ratings."
+    read_post:
+      comment: "You aren't authorized to read that post."
+    read_posts:
+      user: "Sorry but only entrepreneurs have access to the water cooler."
+    add_teams:
+      relationship: "Sorry but you aren't allowed to add teams through that page."
+

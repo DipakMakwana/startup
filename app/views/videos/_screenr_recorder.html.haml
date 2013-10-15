@@ -1,0 +1,65 @@
+- title ||= 'Checkin Video'
+- begin_recording ||= false
+
+%h3.message.instructions
+  %i Loading screen recorder...
+  %br/
+  %h3 How to Create & Upload a ScreenCast
+  %br/
+  %p 1) Give Permission to the Java App (Pop up or Header)
+  %p 2) Give Permission to the Applet
+  %p 3) When the recording box pops up, click the red record button to start, click "done" to stop.
+  %p 4) Find the Record Screen Cast Window (can be behind your active window)
+  %p 5) Click Approve & Upload on the Record Screen Cast Window
+  %p 6) Once upload is submitted you dismiss the confirmation window and your video is captured.
+  
+:plain
+  <script type="text/javascript">
+    var sEmbedHost = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cscript charset='utf-8' id='screenr_recorder' src='" + sEmbedHost + "nreduce.viewscreencasts.com/api/recorder' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+    // When clicking on button with id "screencast" it will launch the recorder
+    // Recorder settings: http://business.screenr.com/api/settings.php
+    var recorder = null;
+
+    $(function() {
+      recorder = Screenr.Recorder({
+        id:"#{Settings.screenr_recorder_id}", 
+        maxTimeLimit: 300
+      });
+      // Set fields and hide them
+      recorder.addCustomData("user_id", "#{current_user.id}");
+      recorder.addCustomData("startup_id", "#{current_user.startup_id}");
+      recorder.setUserName("#{current_user.name}", false);
+      recorder.setSubject("#{title}", false);
+      recorder.setUserEmail("videos@nreduce.com", false);
+      recorder.setDescription('', false);
+      recorder.setOnComplete(function(screencast){ recordingDone(screencast); });
+      recorder.setOnCancel(function(screencast){ recordingCanceled(screencast); });
+
+      #{begin_recording ? 'startRecording();' : ''}
+    });
+
+    function startRecording(){
+      if(recorder != null)
+        recorder.record();
+    }
+
+    function recordingDone(screencast){
+      //console.log(screencast);
+      $('##{video_id} .video_type').val('Screenr');
+      $('##{video_id} .video_external_id').val(screencast.id);
+      $('##{video_id} .video_external_url').val(screencast.mp4);
+      $('##{video_id} .completed').show();
+      $('##{video_id} .current_video, ##{video_id} .instructions').hide();
+      $('##{video_id} .video_id').remove();
+      // show modal for responses
+      $('.response_modal').modal();
+    }
+
+    function recordingCanceled(screencast){
+      //console.log('recording canceled');
+      $('##{video_id} .video_external_id').val('');
+    }
+  </script>

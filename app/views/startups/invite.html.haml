@@ -1,0 +1,11 @@
+- if current_user.entrepreneur?
+  %h1 Invite Other Startups to join nReduce
+- else
+  %h1 Invite Your Startups to join nReduce
+
+= render 'startups/invite'
+
+- if @setup
+  %br/
+  %br/
+  = button_to "Continue", invite_startups_path(:done => 1), :method => :post, :class => 'btn'

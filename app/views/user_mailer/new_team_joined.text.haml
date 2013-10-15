@@ -1,0 +1,12 @@
+Team "#{@startup.name}" has joined nReduce!\n
+\n
+Market: #{@startup.industry_list}\n
+\n
+Location: #{@startup.team_members.map{|tm| tm.location }.uniq.join(', ')}\n
+\n
+- if @to.is_joe?
+  - @startup.team_members.each do |tm|
+    #{tm.name}: #{tm.email}\n
+    \n
+  \n
+View Startup: #{startup_url(@startup)}

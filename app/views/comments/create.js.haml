@@ -1,0 +1,31 @@
+// Re-enable form
+$("#comments form :submit").removeClass('disabled');
+
+- if @comment.new_record?
+  /* Error - show message */
+  - if @comment.parent_id.blank?
+    $('.comments .new_comment').first.prepend('#{escape_javascript(render('layouts/flash_messages'))}');
+  - else
+    $("#comment_#{@comment.parent_id} .new_comment").prepend('#{escape_javascript(render('layouts/flash_messages'))}');
+- else
+  // No parent
+  - if @comment.parent_id.blank? || @comment.parent_id.present? && @comment.parent.original_post?
+    :plain
+      /* Add the new comment to the top of the comments list */
+      $("#comments .list").prepend("#{escape_javascript(render(@comment))}");
+      /* Reset the comment form */
+      $("#comments #new_comment")[0].reset();
+  - else
+    :plain
+      // Append underneath parent
+      $("#comment_#{@comment.parent_id}").after("<div class='nested_comments'>#{escape_javascript(render(@comment))}</div>");
+      // Remove reply-to comment form
+      $("#comment_#{@comment.parent_id} .new_comment").remove();
+
+  :plain
+    /* Highlight the new comment */
+    $("#comment_#{@comment.id}").effect("highlight", {}, 3000);
+
+    //addCommentControlsListeners();
+
+- flash.discard

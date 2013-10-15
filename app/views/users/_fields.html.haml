@@ -1,0 +1,153 @@
+- if show_user_field?(:name)
+  .control-group{error_css(@user, :name)}
+    = f.label :name, "Name", :class => 'control-label'
+    .controls
+      = f.text_field :name, :class => "span4"
+      = f.semantic_errors :name
+
+- if show_user_field?(:email)
+  .control-group{error_css(@user, :email)}
+    = f.label :email, "Email", :class => 'control-label'
+    .controls
+      = f.text_field :email, :class => "span4"
+      = f.semantic_errors :email
+
+- if show_user_field?(:pic)
+  .control-group{error_css(@user, :pic)}
+    = f.label :pic, 'Profile Picture', :class => 'control-label'
+    .controls
+      = f.file_field :pic
+      = f.hidden_field :pic_cache
+      = f.semantic_errors :pic
+      - if @user.pic?
+        .div{:style => 'margin-top: 10px'}
+          %br/
+          Current Image:
+          = image_tag(@user.pic_url(:small))
+          &nbsp;
+          = f.check_box :remove_pic
+          Remove pic
+
+- if show_user_field?(:location)
+  .control-group{error_css(@user, :location)}
+    = f.label :location, "Location", :class => 'control-label'
+    .controls
+      = f.text_field :location, :class => 'span4', :placeholder => 'City, State, Country'
+      = f.semantic_errors :location
+
+- if show_user_field?(:skill_list)
+  .control-group{error_css(@user, :skill_list)}
+    = f.label :skill_list, "Skills", :class => 'control-label'
+    .controls
+      = text_field_tag 'user[skill_list]', @user.skill_list.map{|i| i.titleize }.join(', '), :maxlength => 80, :placeholder => 'comma, separated', :class => 'span4 skills_list_autocomplete'
+      = f.semantic_errors :skill_list
+
+- if (@user.mentor? or @user.investor?) and show_user_field?(:industry_list)
+  .control-group{error_css(@user, :industry_list)}
+    = f.label :industry_list, "Industries", :class => 'control-label'
+    .controls
+      = text_field_tag 'user[industry_list]', @user.industry_list.map{|i| i.titleize }.join(', '), :placeholder => 'comma, separated', :class => 'span4 industries_list_autocomplete'
+      = f.semantic_errors :industry_list
+
+- if show_user_field?(:one_liner)
+  .control-group{error_css(@user, :one_liner)}
+    = f.label :one_liner, :class => 'control-label'
+    .controls
+      = f.text_field :one_liner, :class => "span4"
+      = f.semantic_errors :one_liner
+
+- if show_user_field?(:bio)
+  .control-group{error_css(@user, :bio)}
+    = f.label :bio, :class => 'control-label'
+    .controls
+      = f.text_area :bio, :size => '80x4', :class => "span4 bio"
+      = f.semantic_errors :bio
+      %p.help-block Minimum 100 characters
+
+- if @user.entrepreneur? and show_user_field?(:intro_video_url)
+  .control-group{error_css(@user, :intro_video_url)}
+    = f.label :intro_video_url, 'Intro Video URL', :class => 'control-label'
+    .controls
+      = f.text_field :intro_video_url, :class => "span4"
+      = f.semantic_errors :intro_video_url
+      %p.help-block Unlisted Youtube URL
+
+- if @user.entrepreneur? and show_user_field?(:meeting_id)
+  .control-group{error_css(@user, :meeting_id)}
+    = f.label :meeting_id, "Your Meeting", :class => 'control-label'
+    .controls
+      = f.select :meeting_id, options_for_select(Meeting.select_options, @user.meeting_id), :include_blank => true, :class => 'span2'
+      = f.semantic_errors :meeting_id
+      %span.help-inline= link_to 'Show Meetings', meetings_path
+      %p.help-block
+        Optional - if you want to attend a local meeting set it here.
+        %br
+        Update this if you change so that the organizer can message you in case of any venue details or changes.
+
+- if @user.entrepreneur? and show_user_field?(:settings)
+  .control-group{error_css(@user, :settings)}
+    = f.label :settings, 'Email me', :class => 'control-label'
+    .controls
+      - User.default_email_on.each do |action|
+        %label{:class => 'checkbox inline'}
+          = check_box_tag "user[email_on][]", action, @user.email_on?(action)
+          = User.email_on_options[action]
+        &nbsp;&nbsp;
+      = f.semantic_errors :settings
+
+
+
+
+- unless @setup
+  %hr/
+  .control-group
+    .controls
+      %h4
+        %small Me, elsewhere:
+
+- if show_user_field?(:blog_url)
+  .control-group{error_css(@user, :blog_url)}
+    = f.label :blog_url, :class => 'control-label'
+    .controls
+      = f.text_field :blog_url, :class => "span3"
+      = f.semantic_errors :blog_url
+
+- if show_user_field?(:twitter)
+  .control-group{error_css(@user, :blog_url)}
+    = f.label :twitter, :class => 'control-label'
+    .controls
+      .input-prepend
+        %span.add-on{:style => 'margin-right: -5px'} @
+        = f.text_field :twitter, :class => "span2"
+      = f.semantic_errors :twitter
+
+- if show_user_field?(:facebook_url)
+  .control-group{error_css(@user, :facebook_url)}
+    = f.label :facebook_url, :class => 'control-label'
+    .controls
+      = f.text_field :facebook_url, :class => "span3"
+      = f.semantic_errors :facebook_url
+
+- if show_user_field?(:linkedin_url)
+  .control-group{error_css(@user, :linkedin_url)}
+    = f.label :linkedin_url, :class => 'control-label'
+    .controls
+      = f.text_field :linkedin_url, :class => "span3"
+      = f.semantic_errors :linkedin_url
+
+- if show_user_field?(:github_url)
+  .control-group{error_css(@user, :github_url)}
+    = f.label :github_url, :class => 'control-label'
+    .controls
+      = f.text_field :github_url, :class => "span3"
+      = f.semantic_errors :github_url
+
+- if show_user_field?(:dribbble_url)
+  .control-group{error_css(@user, :dribbble_url)}
+    = f.label :dribbble_url, :class => 'control-label'
+    .controls
+      = f.text_field :dribbble_url, :class => "span3"
+      = f.semantic_errors :dribbble_url
+
+.form.center{:style => 'margin-bottom: 40px; padding-top: 20px'}
+  = f.submit('Save Profile', :class => "btn btn-success btn-large")

@@ -1,0 +1,60 @@
+- video_id ||= 'new_video'
+- show_video_type = nil
+- begin_recording ||= false
+- unless f.object.valid?
+  - if f.object.type == 'ViddlerVideo'
+    - show_video_type = :viddler
+  - elsif f.object.type == 'Screenr'
+    - show_video_type = :screenr
+  - elsif f.object.type == 'Youtube' || f.object.errors.has_key?(:youtube_url)
+    - show_video_type = :youtube
+.video_form{:id => video_id}
+  .fields.control-group
+    - if !f.object.new_record? || f.object.external_id.present?
+      .current_video
+        %h3 Current video:
+        != f.object.embed_code
+        %br/
+      %h3 Or, record a new version:
+      = f.hidden_field :id, :class => 'video_id'
+    = f.hidden_field :type, :class => 'video_type'
+    = f.hidden_field :external_id, :class => 'video_external_id'
+    = f.hidden_field :remote_image_url, :class => 'video_remote_image_url'
+    = f.hidden_field :external_url, :class => 'video_external_url'
+    .video_embed_buttons{:class => show_video_type.present? ? 'hide' : ''}
+      %h3 Upload a video documenting your work for the week.
+      .button{'data-embed-class' => 'youtube_embed', 'data-video-id' => video_id}
+        = image_tag 'youtube_icon.png', :style => 'width: 60px; height: 24px;'
+        Upload a Video Via YouTube
+      .button{'data-embed-class' => 'screenr_embed', 'data-video-id' => video_id}
+        = image_tag 'screen_icon.png', :style => 'width: 26px; height: 24px; margin-right: 10px;'
+        Record Screencast
+      / .button{'data-embed-class' => 'viddler_embed', 'data-video-id' => video_id}
+      /   = image_tag 'webcam_icon.png', :style => 'width: 28px; height: 23px; margin-right: 10px;'
+      /   Record Via Webcam
+      / .button
+      /   %span.badge.badge-success New? 
+      /   Learn how to make a great video!
+    .video_embed_cancel{:class => show_video_type.present? ? 'hide' : ''}
+      .button= link_to '<i class="icon-arrow-left"></i> All Video Types'.html_safe, '#', :class => 'btn', 'data-video-id' => video_id
+    / .viddler_embed.video_embed{:class => show_video_type == :viddler ? '' : 'hide'}
+    /   = render 'videos/viddler_recorder', :video_id => video_id
+    .screenr_embed.video_embed{:class => show_video_type == :screenr ? '' : 'hide'}
+      = render 'videos/screenr_recorder', :video_id => video_id, :begin_recording => begin_recording
+    .youtube_embed.video_embed{:class => show_video_type == :youtube ? '' : 'hide'}
+      %h3 Paste Youtube Link Here:
+      = f.text_field :youtube_url, :class => "span5 youtube_url", :placeholder => 'http://www.youtube.com/watch?v=088YM4pB9lM', :style => 'font-size: 1.3em; line-height: 1.3em;', 'data-video-id' => video_id
+      = f.semantic_errors :youtube_url
+      .instructions
+        %br/
+        %p How to Upload Your Video Via Youtube?
+        %p 1) Upload your video to Youtube
+        %p 2) Set the videos Privacy Settings to "Unlisted"
+        %p 3) Copy the URL and enter it below.
+        %p (We will import the video into our system so that it is secure)
+        %br/
+
+
+  .completed.hide
+    .check &#x2713;
+    Video Saved

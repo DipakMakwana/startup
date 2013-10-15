@@ -1,0 +1,78 @@
+- content_for :subtitle do
+  nStar Demo Day
+
+.nstarjoe.center
+  %h3
+    On June 4th, 2012...
+    %br/
+    %br/
+    = image_tag 'large_down_arrow.png'
+
+  %h3 624 Teams committed to building great products started nReduce...
+  %h3 Some have faltered...
+  %h3 Others have risen to the challenge...
+
+  %h3 On September 5 at 11am PST...
+  %h3 the Best 10 will be introduced to the world and...
+  %center= image_tag('nstar_final.png')
+  %h2 The nStar 
+  %h4 Will be Born!
+  %br/
+  %br/
+  %br/
+  %br/
+  %h3{:style => 'margin: 50px 200px 0 200px; padding-bottom: 0;'} Sign up to reserve a space in our Online-Only Demo Day:
+  %center
+    = form_for @rsvp, :html => {:class => 'form-horizontal'} do |f|
+      = f.hidden_field :demo_day_id
+      %br/
+      = f.text_field :email, :placeholder => 'Your email address', :class => 'email tk-myriad-pro span5', :style => 'font-size: 45px; height: 50px; line-height: 45px; padding: 8px;'
+      = f.hidden_field :user_id
+      = f.submit 'RSVP', :class => 'btn btn-success btn-large', :style => 'font-size: 45px; line-height: 45px;'
+      %div{:style => 'font-size: 1.5em; margin-top: 30px; color: #666; margin-bottom: 150px'}
+        = f.radio_button :accredited, false
+        I'm not an SEC-accredited investor
+        &nbsp;
+        = f.radio_button :accredited, true
+        I am an SEC-accredited investor
+
+  %h1 How will the Online Only Demo Day work?
+  %br/
+  %br/
+  .row
+    .span3
+      %p
+    .span2.center
+      = image_tag('sign-up-for-email.png')
+    .span4
+      .demoday Investors from any where in the world sign up to be invited to the online event.
+    .span3
+  %br/
+  %br/
+  %br/
+  %br/
+  .row
+    .span3
+      %p
+    .span2.center
+      = image_tag('sep5-demo-day-calendar.png')
+    .span4
+      .demoday On September 5th, 2012 from 11am - 1pm PST, accepted investors will gain access to our Online-Only Demo Day
+    .span3
+      %p
+  %br/
+  %br/
+  %br/
+  %br/
+  .row
+    .span3
+      %p
+    .span2.center
+      = image_tag('demo-day.png')
+    .span4
+      .demoday When it starts investors will meet 10 great teams and experience the future of investing.
+    .span3
+  %br/
+  %br/
+  %br/
+  %br/

@@ -1,0 +1,37 @@
+= ViddlerVideo.embedded_recorder_html(30).html_safe
+.instructions
+  %p How to Create & Upload a Webcam Video?
+  %p 1) Click the allow access button below to give access too your web cam.
+  %p 2) Press the red "Record" button to start/stop recording
+  %p 3) When you have finished recording click "Save" then move to Step 2
+  %br/    
+
+
+%h3.message
+
+-# Viddler Recorder documentation: http://developers.viddler.com/documentation/recorder/
+-# http://developers.viddler.com/documentation/articles/howto-record/
+
+-# Mac bug in Lion that won't allow you to click on allow flash recording: http://blog.mailvu.com/blog/adobe-flash-issue-on-mac-os-10-7-lion/
+-# how to change: http://blog.mailvu.com/blog/setting-flash-system-preference-on-a-mac/
+:javascript
+  // Called when recording is finished and saved to the server
+  function recordDone(username,user_video_number,video_id) {
+    // Set video id correctly
+    if(video_id != null){
+      $('##{video_id} .video_external_id').val(video_id);
+      $('##{video_id} .video_type').val('ViddlerVideo');
+      $('##{video_id} .completed').show();
+      $('##{video_id} .current_video, ##{video_id} .instructions').hide();
+      $('##{video_id} .video_id').remove();
+    }
+  }
+
+  function recordSave(){
+    //console.log('recording saved - check to see if form is ready and we can submit it');
+  }
+
+  // called to make sure recording is saved
+  function saveRecording(){
+    doSaveRecord();
+  }

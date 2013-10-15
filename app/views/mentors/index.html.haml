@@ -1,0 +1,122 @@
+.mentors
+  - if current_user.mentor? and !current_user.roles?(:nreduce_mentor)
+    .row
+      .span12
+        %h1
+          %small nReduce Mentors
+        %hr/
+        %br/
+        %br/
+        %br/
+        %div{:align => 'center'}
+          %h1 Are you interested in helping other startups?
+
+    .row
+      .span3
+        &nbsp;
+      .span6{:align => 'center', :style => 'margin: 50px 0 150px 0;'}
+        Because you are already mentoring a startup, we invite you to join the nReduce mentor network.
+
+        Once you join, qualified startups will be able to contact you and ask if you're interested in mentoring them.
+        %br/
+        %br/
+        %br/
+        %br/
+        
+        - if current_user.profile_completeness_percent < 1.0
+          - btn_class = ' disabled'
+          %br/
+          %h4 #{link_to('Complete your profile', edit_user_path(current_user))} in order to be listed as a mentor.
+          %br/
+          = link_to 'Join Mentor Network', '#', :class => 'btn btn-large disabled', :style => 'padding: 10px; font-size: 22px;'
+          %br/
+          %br/
+        - else
+          = form_tag change_status_mentors_path, :class => 'form-inline' do
+            = hidden_field_tag 'nreduce_mentor', 1
+            = submit_tag 'Join Mentor Network', :class => 'btn btn-large btn-primary', :style => 'padding: 10px; font-size: 22px;'
+      .span3
+        &nbsp;
+  - else
+    .row
+      .span8
+        %h1
+          %small Connect with great mentors
+      .span4{:align => 'right'}
+        - if can? :invite_mentor, @startup
+          = link_to "Find a Mentor", search_mentors_path, :class => "btn btn-success"
+        - else
+          = link_to "Find a Mentor", '#', :class => "btn disabled"
+
+    %hr/
+    %br/
+    %p
+      %strong To access the nReduce mentor network, you must meet all requirements:
+    %table.table.requirements
+      %thead
+        %th &nbsp;
+        %th Your Startup
+        %th Requirement
+        %th Met Requirement?
+      %tbody
+        %tr{:class => @mentor_elements[:consecutive_checkins][:passed] ? 'passed' : ''}
+          %td Consecutive Checkins (Before & After)
+          %td
+            %h2= @mentor_elements[:consecutive_checkins][:value]
+          %td
+            %h2 4+
+          %td
+            %h2 #{@mentor_elements[:consecutive_checkins][:passed] ? 'Yes' : 'No'}
+        %tr{:class => @mentor_elements[:num_awesomes][:passed] ? 'passed' : ''}
+          %td # of Awesomes
+          %td
+            %h2 #{@mentor_elements[:num_awesomes][:value]}
+          %td
+            %h2 10+
+          %td
+            %h2 #{@mentor_elements[:num_awesomes][:passed] ? 'Yes' : 'No'}
+        %tr{:class => @mentor_elements[:community_status][:passed] ? 'passed' : ''}
+          %td Team Community Rating
+          %td
+            %h2 #{@mentor_elements[:community_status][:value].round(2)}
+          %td
+            %h2 1.00+
+          %td
+            %h2 #{@mentor_elements[:community_status][:passed] ? 'Yes' : 'No'}
+        %tr{:class => @mentor_elements[:profile_completeness][:passed] ? 'passed' : ''}
+          %td Team Profile Completeness
+          %td
+            %h2 #{(@mentor_elements[:profile_completeness][:value] * 100).to_i}%
+          %td
+            %h2 100%
+          %td
+            %h2 #{@mentor_elements[:profile_completeness][:passed] ? 'Yes' : 'No'}
+        %tr{:class => @mentor_elements[:total][:passed] ? 'passed' : ''}
+          %td &nbsp;
+          %td &nbsp;
+          %td &nbsp;
+          %td
+            %h2 #{@mentor_elements[:total][:value]} passed
+
+
+    - mentors = @startup.connected_to('User')
+    .row
+      .span12
+        %hr
+        %br
+        %h2
+          %small Your Mentors
+        %hr
+        %br/
+    .row
+      .span12
+        = render 'startups/team_members', :team_members => mentors
+        .left
+          .span1{:align => 'right', :style => 'margin-left: 0'}= link_to image_tag('adduser.png'), edit_startup_path(@startup)
+          .span2
+            %h4= link_to 'Invite Current Mentor', edit_startup_path(@startup)
+            %p
+              %small Add a mentor you already have
+        .clear
+      %hr/
+      %br/

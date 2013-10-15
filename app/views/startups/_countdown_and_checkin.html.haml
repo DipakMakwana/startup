@@ -1,0 +1,38 @@
+- startup ||= nil
+- next_checkin_ends_at = Checkin.next_window_for(startup.checkin_offset).last
+.countdown
+  - unless startup.blank?
+    - current_checkin = startup.current_checkin
+    - if current_checkin.present?
+      - if Checkin.in_time_window?(startup.checkin_offset)
+        .right.time_left= hours_minutes_until(next_checkin_ends_at)
+      .left.team_details
+        .week Team #{startup.name}
+        - startup.team_members.shuffle.first(3).each do |tm|
+          .team_member.left= image_tag tm.pic_url(:small)
+      .left.goal_details
+        .week Goal For Week Of #{current_checkin.time_label}:
+        .goal #{current_checkin.goal}
+      .clear
+      .timeline
+        .nav
+          .navbar
+            .navbar-inner
+              %ul.nav
+                - 6.downto(1) do |i|
+                  - at = next_checkin_ends_at - (i + 1).days
+                  - past = Time.current > at
+                  %li.day{:class => past ? 'past' : 'future'}= link_to at.strftime('%A'), '#'
+                %li.day= link_to '', '#'
+              .progress
+                .bar{:style => "width: #{Checkin.pct_complete_week(startup.checkin_offset)}%;"}
+              .checkin_btn
+                - if Checkin.in_time_window?(startup.checkin_offset)
+                  - if current_checkin.present? && current_checkin.completed?
+                    = link_to 'View Checkin', current_checkin, :class => 'btn btn-large btn-info'
+                  - else
+                    .active= link_to 'Check In', edit_checkin_path(current_checkin), :class => "btn btn-large btn-warning"
+                - else
+                  = link_to 'Keep Working', '#', :class => "btn btn-large disabled", :onclick => "return false"
+.countdown_separator
+

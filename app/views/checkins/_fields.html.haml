@@ -1,0 +1,131 @@
+.row{:style => 'padding-top: 10px'}
+  .span1
+    %p
+  .span5
+    .stage
+      .left.number 1
+      .left{:style => 'margin-left: 20px; margin-top: 20px'} 
+        %h1 Record Video
+      .clear
+  .span5
+    .stage
+      .left.number 2
+      .left{:style => 'margin-left: 20px; margin-top: 20px'} 
+        %h1 Enter Information
+      .clear
+
+- if @before_disabled == true
+  / - if @checkin.submitted?
+  /   %h4 'Before' Submitted
+  %p
+- else
+  = hidden_field_tag 'checkin_type', 'before', :id => 'checkin_type'
+
+  .row{:style => 'padding-top: 20px'}
+    .span1
+      %p
+    .span5
+      .control-group{error_css(@checkin, :before_video)}
+        = f.semantic_errors :before_video
+      %p Please record a 1 min video documenting what you want to accomplish this week.
+      = f.fields_for :before_video do |av|
+        = render 'videos/form', :video_id => av.object.new_record? ? 'new_before_video' : "video_#{av.object.id}", :f => av
+
+    .span5{:style => 'padding-left: 70px'}
+      .control-group{error_css(@checkin, :goal)}
+        %p
+          &nbsp
+        = f.label :goal, "This Week's Goal:", :style => 'font-size:38px; margin-bottom:40px; margin-top:40px', :maxlength => 255, :class => 'control-label'
+        .controls
+          = f.text_field :goal, :style => 'height: 30px; line-height:24px; font-size:22px', :class => "span4 checkin_start_focus", :placeholder => "Test, Ship or Hustle...", :maxlength => 100
+          = f.semantic_errors :goal
+
+- if @after_disabled == true
+  / - if @checkin.completed?
+  /   %h4 'After' Submitted
+  %p
+- else
+  = hidden_field_tag 'checkin_type', 'after', :id => 'checkin_type'
+  
+  .row{:style => 'padding-top: 10px'}
+    .span1
+      %p 
+    .span5
+      .control-group{error_css(@checkin, :video)}
+        = f.semantic_errors :video
+      %p Please record a 1-2 min video documenting what you did this past week.
+      = f.fields_for :video do |v|
+        = render 'videos/form', :video_id => v.object.new_record? ? 'new_video' : "video_#{v.object.id}", :f => v
+    .span5{:style => 'padding-left: 20px; padding-top: 10px'}
+      %h3 Did you accomplish last week's goal?
+      %h2 #{@checkin.goal.blank? ? '(none)' : h(@checkin.goal)}
+      %p{:style => 'padding-top: 0px;'}
+      .control-group{error_css(@checkin, :accomplished), :style => 'margin-bottom: 10px'}
+        = f.hidden_field :accomplished
+        .controls
+          .btn-group{'data-toggle' => 'buttons-radio'}
+            %button.btn.btn-large.accomplished{:type => 'button', 'data-value' => 'false', :class => (!@checkin.accomplished.nil? && @checkin.accomplished? == false) ? 'active' : ''} Nope :(
+            %button.btn.btn-large.accomplished{:type => 'button', 'data-value' => 'true', :class => (!@checkin.accomplished.nil? && @checkin.accomplished? == true) ? 'active' : ''} Heck Yeah!
+          = f.semantic_errors :accomplished
+
+      .control-group.pre_launch{:class => @checkin.startup.launched? ? 'hide' : ''}
+        .controls
+          = hidden_field_tag 'startup[launched]', @checkin.startup.launched?, :id => 'startup_launched'
+          %h3 Have you launched to customers?
+          .btn-group{'data-toggle' => 'buttons-radio'}
+            %button.btn.btn-large{:type => 'button'} No
+            %button.btn.btn-large{:type => 'button', :onclick => "$('#startup_launched').val(1); $('.pre_launch').hide(); $('.launched').fadeIn();"} Yes
+          %p.help-text
+            %i (Privately or Publicly)
+
+      .launched{:class => @checkin.startup.launched? ? '' : 'hide'}
+        = f.fields_for :measurement do |m|
+          = m.hidden_field :instrument_id, :id => 'checkin_instrument_id'
+          .control-group{:style => 'margin-bottom: 0'}
+            .controls
+              %h3#instrument_name{:class => m.object.instrument.new_record? ? 'hide' : ''}= m.object.instrument.name
+              - if m.object.instrument.new_record?
+                #instrument_name_form
+                  %p
+                    %h3= link_to '<i class="icon-signal"></i> Choose Your Metric'.html_safe, '#', :onclick => "$('#instrument_modal').modal(); return false;", :class => 'btn btn-large'
+                    - if @checkin.startup.launched?
+                      %br/
+                      %i Required, since you are launched (to show traction &amp; progress)
+              = f.semantic_errors :measurement
+
+          #instrument_value{:class => m.object.instrument.new_record? ? 'hide' : ''}
+            .control-group{error_css(m.object, :value)}
+              .controls
+                = m.text_field :value, :class => "span2", :id => 'checkin_measurement_value'
+                %span.help-text 
+                  %i &nbsp;(Past Week)
+                = m.semantic_errors :value
+
+      .control-group{error_css(@checkin, :notes), :style => 'margin-top: 10px'}
+        %h3 How can your fellow nReducers help you?
+        .controls
+          = f.text_area :notes, :size => '200x1', :class => "span4 checkin_end_comments", :placeholder => "Give me feedback on..."
+          = f.semantic_errors :notes
+
+
+      - if @show_before_experiment
+        %br/
+        %hr/
+        %p{:style => 'margin-top: 5px'} Optional: You can now submit your goal for next week in this checkin.
+
+        .control-group{error_css(@checkin, :next_week_focus)}
+          = f.label :next_week_focus, "Goal for Next Week: (optional)", :style => 'font-size: 18px; margin-bottom: 12px; margin-top: 12px', :maxlength => 255, :class => 'control-label'
+          .controls
+            = f.text_field :next_week_focus, :style => 'height: 30px; line-height:24px; font-size:22px', :class => "span4 checkin_start_focus", :placeholder => "Test, Ship or Hustle..."
+            = f.semantic_errors :next_week_focus
+
+        .control-group{error_css(@checkin, :value)}
+          = f.label :next_week_youtube_url, "Before Video Youtube URL: (optional)"
+          .controls
+            = f.text_field :next_week_youtube_url, :class => "span4", :placeholder => 'http://www.youtube.com/watch?v=088YM4pB9lM'
+
+
+.form-controls.center{:style => 'margin-bottom: 10px; padding-top: 20px; '}
+  %p{:style => 'padding-top: 10px'}
+    &nbsp
+  = f.submit "Submit Checkin", :class => "btn btn-success btn-large submit"

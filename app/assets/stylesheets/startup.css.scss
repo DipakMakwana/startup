@@ -1,0 +1,203 @@
+.startup {
+  .edit_btn {
+    padding-right: 10px;
+  }
+  .elevator_pitch {
+    padding-top: 20px;
+  }
+}
+
+.onboard {
+  .buttons, .buttons input, .buttons a {
+    font-size: 30px; 
+    line-height: 36px;
+    font-weight: bold;
+  }
+  .form-actions {
+    border: 0px;
+    background-color: transparent;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+}
+
+.wrapper > .container .onboard .control-group {
+  padding: 8px;
+}
+
+.wrapper > .container .onboard hr {
+  margin-bottom: 15px;
+}
+
+.startups {
+  .borderline {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #efefef;
+    }
+  .legend {
+      color: #cccccc;
+      font-size:12px;
+      padding-top:20px
+    }
+  .search {
+    margin-top: 40px; 
+    form {
+      h4 { margin-top: 6px; margin-right: 12px;}
+      margin-bottom: 20px;
+      margin-top: 20px;
+      input, select {
+       margin-bottom: 0px; 
+      }
+    
+    }
+    .startup {
+      height: 110px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-bottom: 0px solid #efefef;
+      .name {
+        max-width: 260px;
+        h3 a {
+          white-space: nowrap;
+          text-wrap:none;
+        }
+      }
+      .location { margin-top: 17px; font-weight: bold; }
+      .one_liner { color: #999;} 
+      .rating, .weeks_worked {
+        h4 { line-height: 40px; }
+      }
+    
+    }
+  }
+}
+
+.countdown_separator {
+  height: 1px;
+  padding-top: 12px;
+  margin: 0 -30px 8px -30px;
+  border-bottom: 2px solid #efefef;
+}
+.countdown {
+  overflow-x: hidden;
+  width: 1097px;
+  margin-left: 35px;
+  position: relative;
+  .week {
+    margin-bottom: 5px;
+    font-weight: normal;
+    font-size: .7em;
+    color: #999999;
+  }
+  .team_details {
+    height: 96px;
+    margin-right: 10px;
+    .team_member {
+      margin-right: 10px;
+    }
+  }
+  .goal_details {
+    max-width: 700px;
+    .goal {
+      margin-top: 10px;
+      margin-bottom: 8px;
+      font-weight: normal;
+      font-size: 2em;
+      line-height: 1.2em;
+      color: #888888;
+    }
+  }
+  
+  .time_left {
+    font-size: .85em;
+    width: 200px;
+    text-align: center;
+    margin-top: 65px;
+    color: #999;
+  }
+  .timeline {
+    width: 100%;
+    .navbar-inner {
+      padding-left: 0px;
+      background: none;
+      position: relative;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      .nav {
+        width: 100%;
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        li.day {
+          width: 155px;
+          a { text-align: center; }
+        }
+        li.past {
+          a {
+            color: #20A7E5; 
+            text-shadow: none;
+          }
+          border-right: 1px solid #20A7E5
+        }
+        li.future {
+          a { color: #ccc; }
+          border-right: 1px solid #ccc;
+          border-left: 1px solid #fff;
+        }
+      }
+      .progress {
+        margin-left: 0px;
+        z-index: 0;
+        min-height: 40px;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        .bar {
+          min-height: 40px;
+          background-color: #55CDF0;
+          background: image-url('animated14.gif') repeat-x;
+          // background-image: -moz-linear-gradient(top, #55CDF0, #25A6EA);
+          // background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#55CDF0), to(#25A6EA));
+          // background-image: -webkit-linear-gradient(top, #55CDF0, #25A6EA);
+          // background-image: -o-linear-gradient(top, #55CDF0, #25A6EA);
+          // background-image: linear-gradient(to bottom, #55CDF0, #25A6EA);
+          // background-repeat: repeat-x;
+          // filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#55CDF0', endColorstr='#25A6EA', GradientType=0);
+        }
+      }
+      .checkin_btn {
+        z-index: 3;
+        margin: -15px 1px 0 0;
+        position: absolute;
+        right: 10px;
+        .btn {
+          font-size: 1.6em;
+          line-height: 1.6em;
+          width: 138px;
+          white-space: nowrap;
+        }
+        .disabled {
+          opacity: 1;
+          color: #999;
+          background-color: #efefef;
+          font-weight: normal;
+          -moz-box-shadow: 0px 1px 1px 1px #efefef;
+          -webkit-box-shadow: 0px 1px 1px 1px #efefef;
+          box-shadow: 0px 1px 1px 1px #efefef;
+        }
+      }
+    }
+  }
+}
+
+#invite_team_modal { width: 600px;}
+
+form.startup {
+  select.founding_date {
+    width: 100px;
+  }
+}

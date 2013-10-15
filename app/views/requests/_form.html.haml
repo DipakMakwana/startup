@@ -1,0 +1,83 @@
+.row
+  .span5.offset4
+    = semantic_form_for @request, :html => {:class => 'form-vertical'} do |f|
+      = f.hidden_field :type
+  
+      - if @request.title_required?
+        .control-group{error_css(@request, :title)}
+          = f.label :title, 'Title of your help request', :class => 'control-label taskheader'
+          .controls
+            = f.text_field :title, :class => 'span5'
+            = f.semantic_errors :title
+
+      - if @request.errors[:data].present?
+        .control-group.data{error_css(@request, :data)}
+          = f.semantic_errors :data
+
+      - @request.questions.each do |k,v|
+        .control-group
+          = f.label :data, v[0], :class => 'control-label taskheader'
+          .controls
+            - if v[1] == 'string'
+              = text_field_tag "request[data][#{k}]", @request.data[k], :class => 'span5', :placeholder =>  v[2].present? ? v[2] : ''
+            - elsif v[1] == 'text'
+              = text_area_tag "request[data][#{k}]", @request.data[k], :class => 'span5', :placeholder =>  v[2].present? ? v[2] : ''
+      - if @request.type == 'RetweetRequest'
+        .tutorial_link
+          Need help finding the 
+          = link_to 'URL of a Tweet?', twitter_url_path, :target => '_blank'
+
+      %table.pricing
+        %tr.labels
+          %td= f.label :num, 'Desired Quantity', :class => 'control-label'
+          %td{:align => 'right', :width => '120'}
+            %label
+              Rate Per
+              %br/
+              #{pluralize(@request.pricing_step, @request.pricing_unit)}
+          %td &nbsp;
+          %td= label_tag 'Total Cost'
+        %tr.select_row
+          %td{:valign => 'center'}
+            .control-group{error_css(@request, :num)}
+              .controls
+                = f.select :num, options_for_select(1.upto(10).map{|i| ["#{pluralize(i * @request.pricing_step, @request.pricing_unit)}",i] }, @request.num), {}, {:class => 'num'}
+                = f.semantic_errors :num
+          %td
+            .right= image_tag 'headercoin.png'
+            .right.coin #{@request.price}
+            .clear
+          %td.equals =
+          %td
+            .left.coin= @request.total_price
+            .left= image_tag 'headercoin.png'
+            .clear
+        %tr.line
+          %td{:colspan => 4}
+            %hr/
+        %tr
+          %td{:colspan => 2, :align => 'right'} Current Balance
+          %td.equals =
+          %td
+            .left.coin= @request.startup.balance
+            .left= image_tag 'headercoin.png'
+            .clear
+
+        %tr
+          %td{:colspan => 2, :align => 'right'} Sufficient Funds
+          %td.equals =
+          %td.has_balance
+            - if @request.startup_has_balance?
+              .yes Yes
+            - else
+              .left.no No
+              -#.left= link_to 'Buy', '#'
+              .left= link_to 'Earn', '/work_room?earn=1', :class => 'btn btn-success'
+              .clear
+
+      .control-group.submit_btn
+        .controls.center
+          - if @request.startup_has_balance?
+            = f.submit 'Post Request', :class => 'btn btn-large btn-success'
+          - else
+            = link_to 'Post Request', '#', :class => 'btn btn-large btn-disabled', :disabled => true

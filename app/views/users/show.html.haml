@@ -1,0 +1,126 @@
+-# - content_for :subtitle do
+-#   Coming Soon!
+
+.row
+  .span4
+    %p{:style => 'margin-top: 20px'} &nbsp
+  .span8{:align => 'right'}
+    - if user_signed_in? and current_user.id == @user.id
+      = link_to "Edit Profile", edit_user_path(@user), :class => "btn"
+    - if current_user.admin? and current_user.id != @user.id
+      - unless current_user.account_setup?
+        = link_to "Approve User", approve_admin_user_path(@user), :class => 'btn btn-success'
+      = link_to "Sign in As User", sign_in_as_admin_user_path(@user), :class => 'btn'
+    - if @can_invite_as_mentor == true
+      = link_to 'Ask to Mentor', '#', :class => 'btn btn-large', :onclick => "$('#user_#{@user.id}_invite').modal(); return false;"
+      .modal.hide.invite_mentor{:id => "user_#{@user.id}_invite", :align => 'left'}
+        = form_for Relationship.new(:entity => current_user.startup, :connected_with => @user), :html => {:class => 'form-inline'} do |f|
+          .modal-header
+            %button.close{:type => 'button', 'data-dismiss' => 'modal'} x
+            %h3 Ask #{@user.name} to Mentor Your Startup
+          .modal-body
+            / Had to be manual context because when you go to save the model it transmits as an integer and bitmask attributes doesn't know what to do with it
+            = hidden_field_tag 'relationship[context]', 'startup_mentor'
+            = f.hidden_field :context
+            = f.hidden_field :entity_id
+            = f.hidden_field :entity_type
+            = f.hidden_field :connected_with_id
+            = f.hidden_field :connected_with_type
+            Write one to two paragraphs about why you think they are a good mentor for you:
+            %br/
+            = f.text_area :message, :style => 'width: 400px; height: 100px'
+          .modal-footer.center
+            = link_to 'Close', '#', :class => 'btn', 'data-dismiss' => 'modal'
+            = f.submit 'Send Request', :class => 'btn btn-primary'
+            %br/
+            %i Limit one per week
+    - if current_user.id != @user.id
+      - if @user.startup.present?
+        = link_to_message_startup(@user.startup)
+      - else
+        = link_to_message_user(@user)
+.row
+  .span12{:style => 'padding: 0'}
+    .row{:style => 'padding: 0px'}
+      .span5{:style => 'padding-left: 45px'}= image_tag @user.pic_url(:lg_square), :width => 400, :height => 400
+      .span5{:style => 'margin-left: -35px'}
+        %h1{:style => 'font-size: 50px; margin-top: 5px'}= h(@user.name)
+        - unless @user.one_liner.blank?
+          %p{:style => 'padding-top: 20px'}
+            %small Oneliner:
+          %h3= h(@user.one_liner)
+        - if @user.roles?(:nreduce_mentor)
+          %h2
+            %small nReduce Mentor
+        - elsif @user.roles?(:mentor)
+          %h2
+            %small Mentor
+        - unless @user.startup.blank?
+          %p{:style => 'padding-top: 20px'}
+            %small Team :
+          %h3= link_to h(@user.startup.name), @user.startup
+        - unless @user.location.blank?
+          %p{:style => 'padding-top: 20px'}
+            %small Located: 
+          %h3 #{h(@user.location)}
+        %br
+        = render 'users/profile_icons', :user => @user
+      .span2.greylink
+        .row.center
+          %p{:style => 'padding-top: 20px'}
+            != rating_link(@user)
+
+
+
+    .row
+      .span7
+        -unless @user.bio.blank?
+          %p{:style => 'padding-top: 60px'}
+            %small About #{h(@user.name)}
+          %p= simple_format(h(@user.bio))
+        -unless @user.skill_list.blank?
+          %p{:style => 'padding-top: 10px'} Skills: #{h(@user.skill_list)}
+      .span5
+        %p
+
+- if @user.mentor?
+  - startups = @user.connected_to('Startup')
+  - unless startups.blank?
+    .row
+      .span12
+        %hr
+        %br
+        %h4
+          %small #{h(@user.name).possessive} Teams
+        %br/
+        %hr
+        %br/
+    .row
+      .span12
+        = render 'startups/horizontal_list', :startups => @user.connected_to('Startup')
+        %br
+- elsif !@user.startup.blank?
+  - team_members = @user.startup.team_members - [@user]
+  - unless team_members.blank?
+    .row
+      .span12
+        %p{:style => 'padding-top: 20px'}
+          %small #{h(@user.name).possessive} Teammates
+        %br/
+        %hr
+    .row
+      .span12{:style => 'padding-top: 20px'}
+        = render 'startups/team_members', :team_members => team_members, :add_team_member => false
+
+- if !@current_invite.blank?
+  - if @current_invite.invite_type == Invite::MENTOR || @current_invite.invite_type == Invite::NREDUCE_MENTOR
+    You have been invited to be a mentor!
+  - if !@current_invite.startup.blank?
+    %p #{@current_invite.from.name} has invited you to join Team #{h(@current_invite.startup.name)}:
+    = link_to "Join #{h(@current_invite.startup.name)}", accept_invite_path(:id => @current_invite.code), :class => "btn btn-large btn-primary"
+  - else
+    = link_to "Accept Invite", accept_invite_path(:id => @current_invite.code), :class => "btn btn-large btn-primary"
+  &nbsp;&nbsp;
+  = link_to "Decline Invite", @current_invite, :method => :delete, :class => "btn btn-large", :confirm => "Are you sure you want to decline it?"
+- elsif @user.startup_id.blank? and @user.entrepreneur?
+  = link_to "Register Startup", new_startup_path, :class => "btn btn-large"

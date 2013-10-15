@@ -1,0 +1,67 @@
+- content_for :subtitle do
+  Edit Account
+
+.row
+  .center{:style => 'margin-bottom:40px; padding-top: 20px', :class => @setup ? 'span8' : 'span12'}
+    %h1 Edit Your Profile
+.row{:style => "height:100%"}
+  .span8
+    = semantic_form_for @user, :html => {:class => "form-horizontal"} do |f|
+      .control-group{:style => 'padding: 0; margin: 0'}
+        &nbsp;
+      - if @setup
+        .control-group{:style => 'padding-top: 0'}
+          &nbsp;
+          .controls
+            %strong All fields are required
+      = render 'users/fields', :f => f
+  - unless @setup
+    .span3
+      = render 'users/profile_completeness'
+      .row
+        .span1
+          %p &nbsp
+        .span3
+          - unless @setup
+            %div{:style => 'margin-top:40px'}
+              %strong= link_to 'Change Password', change_password_user_path(current_user)
+          %div{:style => 'margin-top:40px'}
+            - if @user.linkedin_authentication.blank?
+              %a.btn.btn-large{:href => '/auth/linkedin'}
+                = image_tag('linkedin_32.png')
+                Add LinkedIn
+              - if @setup
+                %i To automatically populate your account
+            - else
+              Authorized with
+              = image_tag('linkedin_32.png', :alt => 'LinkedIn', :title => 'LinkedIn')
+          %div{:style => 'margin-top:40px'}
+            %div
+              - if @user.twitter_authentication.blank?
+                %a.btn.btn-large{:href => '/auth/twitter'}
+                  = image_tag('twitter_32.png')
+                  Add Twitter
+              - else
+                Authorized with
+                = image_tag('twitter_32.png', :alt => 'Twitter', :title => 'Twitter')
+          - if 1 == 2 # @user.entrepreneur?
+            .row{:style => 'margin-top:40px'}
+              %h3 Team Member Intro Videos
+              %p Investors invest in people not ideas. To help them better learn about you and your team, each team must member record and upload an intro video covering:
+              %ol.myriad_light{:style => 'font-size: 16px'}
+                %br/
+                %li Who are you?
+                %br/
+                %li What have you done?
+                %br/
+                %li
+                  Why are you doing this startup?
+                  %br/
+                  %br/
+                  %strong Example:
+                  %br/
+                  %br/
+                  :plain
+                    <iframe width="300" height="189" src="http://www.youtube.com/embed/ITq61YDVBbM?rel=0" frameborder="0" allowfullscreen></iframe>
+
+              

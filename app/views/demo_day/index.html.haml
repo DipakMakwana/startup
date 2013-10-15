@@ -1,0 +1,12 @@
+- content_for :subtitle do
+  #{@demo_day.name}
+
+.demo_day
+  -# unless @demo_day.in_the_future?
+  = render 'demo_day/demo_day', :demo_day => @demo_day
+
+  - cache do
+    - previous_demo_days = DemoDay.where(['day < ?', @demo_day.day]).ordered.all
+    - if previous_demo_days.present?
+      - previous_demo_days.each do |d|
+        = render 'demo_day/demo_day', :demo_day => d

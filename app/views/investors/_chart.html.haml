@@ -1,0 +1,63 @@
+-# Doc: http://api.highcharts.com/highchart
+- title ||= h(@instrument.name)
+- measurements ||= @instrument.measurements.ordered_asc.all
+- chart_id ||= 'chart'
+
+.chart{:id => chart_id}
+:plain
+  <script type="text/javascript">
+  var chart;
+  $(document).ready(function() {
+    chart = new Highcharts.Chart({
+      chart: {
+        renderTo: '#{chart_id}',
+        type: 'area'
+      },
+      title: {
+        text: '#{title}'
+      },
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      xAxis: {
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        },
+        categories: [#{measurements.map{|m| "'#{m.key}'" }.join(',')}]
+      },
+      yAxis: {
+        title: {
+          text: '#{title}'
+        },
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      plotOptions: {
+        area: {
+          marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      },
+      series: [{
+        name: '#{title}',
+        data: [#{measurements.map{|m| m.value }.join(',')}]
+      }]
+    });
+  });
+  </script>

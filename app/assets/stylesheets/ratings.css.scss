@@ -1,0 +1,44 @@
+// Place all the styles related to the Ratings controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.rating{
+  .rating-form {
+    form { margin: 0; }
+    .with-errors { padding-left: 10px; }
+  }
+}
+
+.investment_profile {
+  .video_player {
+    margin-right: 15px;
+    .title {
+      font-size: 1.4em;
+    }
+    .thumbnails {
+      margin-left: 10px;    
+      .thumbnail {
+        cursor: pointer;
+        margin: 0 10px 10px 0;
+        border: 4px solid white;
+      }
+      .thumbnail.active {
+        border: 4px solid green;
+      }
+    } 
+  }
+
+  .team_members {
+    margin-top: 20px;
+    .team_member {
+      width: 150px;
+      .pic {
+        margin-bottom: 15px;
+        img {
+          width: 150px;
+          height: 150px;
+        }
+      }
+    }
+  }
+}

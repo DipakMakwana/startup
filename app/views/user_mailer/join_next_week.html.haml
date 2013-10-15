@@ -1,0 +1,23 @@
+= render :partial => 'header'
+%p Hi!
+
+%p We sorry that you missed joining this week's class of founders.
+
+%p We had #{pluralize(@stats[:num_startups], 'startup')} startups join
+
+%p From #{pluralize(@stats[:num_industries], 'industry')} industries
+
+%p Around the globe in #{pluralize(@stats[:num_countries], 'country')}.
+
+%h3.h3= link_to "Are you ready for awesomeness?", join_weekly_class_url(@weekly_class)
+
+%p
+  %strong nReduce:
+  Build a better company - Collaborate with founders - Get feedback from mentors and investors
+
+%p
+  Best,
+  %br/
+  :plain
+    - Joe &amp; Josh
+= render :partial => 'footer'

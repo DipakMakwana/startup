@@ -1,0 +1,20 @@
+.row
+  .right{:style => 'margin-top: 7px'}
+    %ul.nav.nav-pills
+      %li= link_to "Log out", logout_path, :method => :delete
+  .left= link_to image_tag('nreduce_logo_45.png'), '#'
+  .left
+    .navbar
+      .navbar-inner
+        %ul.nav
+          - c = 1
+          - Onboarding.steps.each do |s|
+            - if c < @onboarding_step
+              - klass = 'completed'
+            - elsif c == @onboarding_step
+              - klass = 'active'
+            - else 
+              - klass = ''
+            %li{:class => klass}= link_to s.to_s.titleize, onboard_go_to_path(:step => c)
+            - c += 1
+  .clear

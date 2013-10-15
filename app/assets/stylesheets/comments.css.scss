@@ -1,0 +1,75 @@
+// Place all the styles related to the Comments controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$grey: #d6d6d6;
+$ltgrey: #ffffff;
+$dkgrey: #333;
+$ltblue: #8FB6EC;
+$blue: #3697D5;
+
+a {
+  img {
+    border: 0;
+  }
+}
+
+.comments, #comments {
+  padding-left: 10px;
+  background-color: $ltgrey;
+  .title {
+    font-weight: bold;
+  }
+}
+.comment {
+  padding: 4px 10px 4px 10px;
+  margin-bottom: 15px;
+  font-size: .9em;
+  .controls {
+    .left {
+      margin-right: 6px;
+    }
+    display: none;
+  }
+  .time {
+    font-size: .9em;
+  }
+  .time, .time a {
+    color: #999;
+  }
+  .content {
+    color: #585858;
+    font-size: 1.4em;
+    padding-top: 5px;
+    line-height:150%;
+    p { width: 780px; }
+    textarea { width: 675px; }
+  }
+  .pic {
+    width: 100px;
+    margin-right: 10px;
+  }
+}
+
+.new_comment, .edit_comment {
+  margin-bottom: 0px;
+  .comment {
+    padding-top: 10px;
+    margin-bottom: 0px;
+  }
+  .content{
+    padding: 12px 0 12px 0;
+  }
+  textarea {
+    font-size: 1.1em;
+    line-height: 1.1em;
+  }
+}
+
+.nested_comments {
+  margin-left: 35px;
+}
+
+.nested_comments .nested_comments .nested_comments .nested_comments {
+  margin-left: 0;
+}

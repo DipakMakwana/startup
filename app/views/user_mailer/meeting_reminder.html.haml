@@ -1,0 +1,22 @@
+= render :partial => 'header'
+- if @meeting.organizer.blank?
+  %h4.h4 Message about your nReduce #{@meeting.location_name} local meeting
+- else
+  %h4.h4 Message from #{@meeting.organizer.name}
+  %strong The #{@meeting.location_name} Local nReduce Leader
+%br/
+%br/
+#{simple_format(h(@message))}
+%br/
+%br/
+%h4.h4 Meeting details:
+%strong Time:
+#{@meeting.day_of_week_human} at #{@meeting.start_time}
+%br/
+%strong Location:
+#{@meeting.venue_name}
+%br/
+#{@meeting.venue_address}
+- unless @meeting.venue_url.blank?
+  &nbsp;(#{link_to 'View Map', @meeting.venue_url})
+= render :partial => 'footer'

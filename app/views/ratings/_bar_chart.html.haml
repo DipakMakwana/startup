@@ -1,0 +1,77 @@
+- chart_id ||= 'chart'
+-# Data should be passed in as a k/v hash, with multiple series in the array, ex: {:categories => ['Traction', Team'], :series => {'Investor' => [23, 4]}, {'Mentor' => [3,5]}}
+- data ||= {}
+- title ||= ''
+- type ||= 'column'
+- tooltip_enabled ||= false
+- y_tick_interval ||= 1
+- y_axis_label ||= 'Number of People'
+
+.chart{:id => chart_id}
+:plain
+  <script type="text/javascript">
+  var chart;
+  $(document).ready(function() {
+    chart = new Highcharts.Chart({
+      chart: {
+        renderTo: '#{chart_id}',
+        type: '#{type}'
+      },
+      title: {
+        text: '#{title}'
+      },
+      credits: {
+        enabled: false
+      },
+      xAxis: {
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        },
+        categories: [#{data[:categories].map{|k| "'#{k}'" }.join(',')}]
+      },
+      yAxis: {
+        title: {
+          text: '#{y_axis_label}'
+        },
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        },
+        tickInterval: #{y_tick_interval}
+      },
+      plotOptions: {
+        area: {
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+                lineWidth: 1,
+                lineColor: '#666666'
+            }
+        },
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 1
+        }
+      },
+      tooltip: {
+        enabled: #{tooltip_enabled}
+      },
+      legend: {
+        layout: 'horizontal',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 50,
+        y: 50,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: '#FFFFFF',
+        shadow: true
+      },
+      series: #{data[:series].map{|k,v| {'name' => k, 'data' => v } }.to_json}
+    });
+  });
+  </script>

@@ -1,0 +1,8 @@
+= render :partial => 'header'
+%h1.h1 It is Time to Post Your Progress Update
+%br/
+%h4.h4 You have 24 hours to submit your weekly progress update and set a goal for next week.
+%br/
+%h3= link_to('Post Update', @current_checkin.blank? ? new_checkin_url : edit_checkin_url(@startup.current_checkin))
+
+= render :partial => 'footer'

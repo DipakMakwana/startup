@@ -1,0 +1,22 @@
+%h1 Approve Users for nReduce
+
+%table.table
+  %thead
+    %th Approve
+    %th Name
+    %th Email
+    %th Roles
+    %th Startup
+    %th Intro Video?
+    %th Joined
+  %tbody
+    - @users.each do |u|
+      %tr
+        %td= link_to 'Approve', approve_admin_user_path(u), :class => 'btn', :method => :post
+        %td= link_to u.name, u
+        %td= u.email
+        %td= u.roles
+        %td= u.startup_id.blank? ? '--' : link_to(u.startup.name, u.startup)
+        %td= (!u.startup_id.blank? and !u.startup.intro_video_url.blank?) ? 'Yes' : '--'
+        %td= distance_of_time_in_words_to_now(u.created_at)
+= will_paginate @users

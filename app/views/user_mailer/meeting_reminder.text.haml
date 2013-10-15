@@ -1,0 +1,17 @@
+- if @meeting.organizer.blank?
+  Message about your nReduce #{@meeting.location_name} local meeting\n
+- else
+  Message from #{@meeting.organizer.name}\n
+  The #{@meeting.location_name} Local nReduce Leader\n
+\n
+\n
+#{@message}\n
+\n
+\n
+Meeting details:\n
+\n
+Time: #{@meeting.day_of_week_human} at #{@meeting.start_time}\n
+Location: #{@meeting.venue_name}\n
+#{@meeting.venue_address}\n
+- unless @meeting.venue_url.blank?
+  View Map: #{@meeting.venue_url}

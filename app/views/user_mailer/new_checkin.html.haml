@@ -1,0 +1,11 @@
+= render :partial => 'header'
+%h1.h1 Team #{@checkin.startup.name}
+%br
+%h4.h4 Posted their "After" Video
+%br
+%h4.h4 They Need Help With
+%br
+%h4.h4 #{simple_format(h(@checkin.notes))}
+%br
+%h3.h3= link_to 'Give Awesome Feedback', startup_checkin_url(@checkin.startup, @checkin)
+= render :partial => 'footer'

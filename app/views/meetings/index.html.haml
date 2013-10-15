@@ -1,0 +1,17 @@
+- content_for :subtitle do
+  Local nReduce Meetings
+
+%h2 Local nReduce Meetings
+
+%table
+  %thead
+    %th.span1{:align => 'left'} Location
+    %th.span2{:align => 'left'} Starts At
+    %th.span3{:align => 'left'} Venue
+  %tbody
+    - @meetings.all.each do |m|
+      %tr
+        %td.span2
+          %h4= link_to m.location_name, m
+        %td #{m.day_of_week_human}s at #{m.start_time}
+        %td.span3= m.venue_name

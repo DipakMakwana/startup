@@ -1,0 +1,29 @@
+- content_for :subtitle do
+  = @startup.name
+
+.startup
+  .row
+    .span5.offset7
+      - if !@owner
+        .right= link_to_message_startup(@startup)
+      - else
+        .edit_btn.right= link_to "Edit Startup", "/startup/edit", :class => "btn"
+      .clear
+  %br/
+
+  = render 'startups/profile'
+
+  - if !@can_view_checkin_details and !@entity.blank?
+    .row{:id => "startup_#{@startup.id}"}
+      .span12
+        %br/
+        %div{:align => 'center'}
+          %h3 #{h(@startup.name.possessive)} check-ins are private. To get permission to see them:
+          %br/
+          = render 'relationships/buttons', :entity => @entity, :connected_with => @startup, :relationship => @relationship.present? ? @relationship : @pending_relationship
+  - else
+    = render 'checkins_list'
+
+
+
+

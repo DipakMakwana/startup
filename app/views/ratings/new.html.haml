@@ -1,0 +1,25 @@
+.investors
+
+  = render 'startups/investment_profile'
+  %br/
+
+  - unless @checkins.blank?
+    = render 'startups/checkins_list', :investor_view => true
+    %br/
+    %hr/
+    %br/
+
+  %center
+    = semantic_form_for [@startup, @rating], :remote => true, :html => {:class => 'form-vertical' } do |f|
+      = render 'ratings/fields', :f => f
+      %br/
+      = f.submit 'Save & Stop', :class => 'btn btn-large disabled', :disabled => true
+      &nbsp;&nbsp;
+      = f.submit 'Save & See Next Startup', :class => 'btn btn-large btn-success disabled', :disabled => true
+
+  %div{:align => 'center'}
+    .progress{:style => 'width: 40%', :align => 'left', :title => "#{@pct_complete}% complete"}
+      .bar{:style => "width: #{@pct_complete}%"}
+
+  #rating_modal.hide
+

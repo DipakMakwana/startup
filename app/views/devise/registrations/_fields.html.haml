@@ -1,0 +1,93 @@
+- if @other_join_flow.present?
+  = hidden_field_tag 'ojf', @other_join_flow
+
+- unless @change_password
+  .control-group{error_css(f.object, :name)}
+    = f.label :name, 'Your Name', :class => 'control-label'
+    .controls
+      = f.email_field :name
+      = f.semantic_errors :name
+
+  .control-group{error_css(f.object, :email)}
+    = f.label :email, :class => 'control-label'
+    .controls
+      = f.email_field :email
+      = f.semantic_errors :email
+- unless @password_not_required
+  .control-group{error_css(@user, :password)}
+    = f.label :password, @change_password ? 'New Password' : 'Password', :class => 'control-label'
+    .controls
+      = f.password_field :password
+      = f.semantic_errors :password
+  .control-group{error_css(@user, :password_confirmation)}
+    = f.label :password_confirmation, @change_password ? "Confirm New Password" : 'Confirm Password', :class => 'control-label'
+    .controls
+      = f.password_field :password_confirmation
+      = f.semantic_errors :password_confirmation
+- unless @user.new_record?
+  .control-group{error_css(@user, :current_password)}
+    = f.label :current_password, 'What is your current password?', :class => 'control-label'
+    .controls
+      = f.password_field :current_password
+      = f.semantic_errors :current_password
+      %p.help-block (we need your current password to confirm your changes)
+
+.control-group{error_css(f.object, :location)}
+  = f.label :location, 'Your Location', :class => 'control-label'
+  .controls
+    = f.email_field :location
+    = f.semantic_errors :location
+
+/ .control-group{error_css(@user, :pic)}
+/   = f.label :pic, 'Profile Picture', :class => 'control-label'
+/   .controls
+/     = f.file_field :pic
+/     = f.hidden_field :pic_cache
+/     = f.semantic_errors :pic
+/     %span.help-inline (optional)
+/     - if @user.pic?
+/       .div{:style => 'margin-top: 10px'}
+/         %br/
+/         Current Image:
+/         = image_tag(@user.pic_url(:small))
+/         &nbsp;
+/         = f.check_box :remove_pic
+/         Remove pic
+
+- if @startup_join_flow
+  %hr/
+  %br/
+  = f.fields_for :startup do |s|
+    = s.hidden_field :in_signup_flow
+    .control-group{error_css(s.object, :name)}
+      = s.label :name, 'Startup Name', :class => 'control-label'
+      .controls
+        = s.text_field :name
+        = s.semantic_errors :name
+    / .control-group{error_css(s.object, :one_liner)}
+    /   = s.label :one_liner, "One Liner", :class => 'control-label'
+    /   .controls
+    /     = text_field_tag 'user[startup_attributes][one_liner]', s.object.one_liner, :placeholder => 'ex: Facebook for pets'
+    /     = s.semantic_errors :one_liner
+    .control-group{error_css(s.object, :website_url)}
+      = s.label :website_url, "Website", :class => 'control-label'
+      .controls
+        = text_field_tag 'user[startup_attributes][website_url]', s.object.website_url, :placeholder => 'http://www.mystartup.com'
+        %span.help-inline (optional)
+        = s.semantic_errors :website_url
+
+
+  / .control-group
+  /   .controls
+  /     Add your teammates:
+  /     .teammates
+  /       = f.semantic_errors :sent_invites
+  /       - f.object.sent_invites.build if f.object.sent_invites.blank?
+  /       - f.object.sent_invites.each do |si|
+  /         = text_field_tag 'user[teammate_emails][]', si.email, :placeholder => 'founder@email.com'
+  /         = link_to '<i class="icon-plus"></i>'.html_safe, '#', :class => 'btn user_add_teammate_btn'
+  /         %span.help-inline (optional)
+  /         /= si.semantic_errors :email
+
+.control-group
+  .controls= f.submit "Join", :class => 'btn btn-large btn-success', :style => 'padding: 10px 25px 10px 25px; font-size:50px; line-height:60px'

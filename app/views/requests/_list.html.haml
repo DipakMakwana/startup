@@ -1,0 +1,86 @@
+- owner ||= false
+- limit ||= 10
+- c = 0
+- requests.each do |r|
+  - type_titleized = r.type_human
+  - request_image_url = "requests/#{r.type.to_url}.png"
+  - unless r.closed?
+    = div_for r, :class => c >= limit ? 'hide task' : 'task' do
+      .left.pic{:title => type_titleized}= image_tag request_image_url, :alt => type_titleized
+      .left.pic= link_to image_tag(r.startup.logo_url(:small), :alt => r.startup.name), r.startup, :title => r.startup.name
+      .left.pic= image_tag "ready.png"
+      .left
+        .coin.center
+          .count
+            - if owner
+              = r.num * r.price
+            - else
+              = r.user_can_earn(current_user)
+          = image_tag "smallcoin.png"
+      - if r.type == 'RetweetRequest'
+        .left.summary
+          %span.title TWEET:
+          = r.extra_data['tweet_content']
+        .right.rtbutton
+          - if r.startup_id == current_user.startup_id
+            - if r.num > 0
+              %h4.open Open
+              .cancel= link_to 'Cancel', cancel_request_path(r), :method => :post, :confirm => "Are you sure you want to cancel it?"
+            - else
+              %h4.completed Completed
+          - else
+            - if @authenticated_for_twitter
+              = form_for [r, Response.new(:request_id => r.id)] do |f|
+                = f.hidden_field :request_id
+                = f.submit 'Retweet', :class => 'btn btn-large btn-success'
+            - else
+              = button_to 'Retweet', capture_and_login_path(:redirect_to => new_request_response_path(r)), :method => :get, :class => 'btn btn-large btn-success'
+      - elsif r.type == 'UsabilityTestRequest'
+        .left.summary
+          %span.title= r.title
+        .right.rtbutton
+          - if r.startup_id == current_user.startup_id
+            - if r.num > 0
+              %h4.open Open
+              .cancel= link_to 'Cancel', cancel_request_path(r), :method => :post, :confirm => "Are you sure you want to cancel it?"
+            - else
+              %h4.completed Completed
+          - else
+            = button_to 'Test It!', [r, Response.new(:request_id => r.id)], :class => 'btn btn-large btn-success'
+      .clear
+    - c += 1
+    - if c == limit
+      .viewmore= link_to 'View More', '#', :onclick => "$('.task.hide').show(); $(this).parent().hide(); return false;"
+  - r.responses.each do |rs|
+    -# don't show unless this person responded, or this is the request owner and the response hasn't been canceled, rejected or expired
+    - next unless (rs.user_id == current_user.id || owner) && !rs.canceled? && !rs.rejected? && !rs.expired?
+    = div_for rs, :class => c >= limit ? 'hide task' : 'task' do
+      .left.pic{:title => type_titleized}= image_tag request_image_url, :alt => type_titleized
+      .left.pic= link_to image_tag(r.startup.logo_url(:small), :alt => r.startup.name), r.startup, :title => r.startup.name
+      .left.pic= link_to image_tag(rs.user.pic_url(:small), :alt => rs.user.name), rs.user, :title => rs.user.name
+      .left
+        .coin.center
+          .count= rs.amount_paid
+          = image_tag "smallcoin.png"
+      .left.summary
+        - if r.type == 'RetweetRequest'
+          %span.title TWEET:
+          = r.extra_data['tweet_content']
+        - else
+          %span.title= r.title
+      .right.rtbutton
+        - if rs.started? && rs.user_id == current_user.id
+          = button_to 'Finish', [r, rs], :method => :get, :class => 'btn btn-disabled btn-large'
+        - elsif rs.completed? && owner
+          = button_to 'Review', request_response_path(r, rs), :method => :get, :class => 'btn btn-success btn-large'
+        - elsif rs.accepted? && owner
+          - if rs.thanked?
+            %h4 Thanked
+          - else
+            = button_to 'Thank', thank_you_response_path(rs), :class => 'btn btn-success btn-large', :method => :get
+        - else
+          %h4= rs.status.first.to_s.titleize
+      .clear
+    - c += 1
+    - if c == limit
+      .viewmore= link_to 'View More', '#', :onclick => "$('.task.hide').show(); $(this).parent().hide(); return false;"

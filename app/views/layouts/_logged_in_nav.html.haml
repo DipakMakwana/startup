@@ -1,0 +1,142 @@
+- hide_nav ||= false
+.nav
+  .navbar
+    .navbar-inner
+      %ul.nav.pull-left
+        %li= link_to image_tag('nreduce_logo_45.png'), (@demo_day.present? ? '/d' : "/"), :class => 'logo'
+        - if current_user.entrepreneur? && current_user.startup.present?
+          %li.add_teams= link_to '<i class="icon icon-search"></i> Search Teams'.html_safe , search_startups_path
+        %li.dropdown.notifications
+          %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown', :rel => @unread_notifications_count}
+            .left.icon{:class => @unread_notifications_count > 0 ? 'new' : 'up'}
+            - if @unread_notifications_count > 0
+              .left.badge= @unread_notifications_count
+            .clear
+          - unless @notifications.nil?
+            %ul.dropdown-menu
+              %li.title Notifications
+              - if @notifications.size == 0
+                %li.item= link_to 'You have no recent activity', '#'
+              - else
+                .scrollable
+                  - @notifications.each do |n|
+                    - elements = elements_for_notification(n)
+                    - the_link = elements[2].blank? ? '#' : elements[2]
+                    %li.notification.item{:class => n.read_at.blank? ? 'new' : '', :rel => the_link} 
+                      .time_ago.right #{time_for_conversation(n.created_at)}
+                      - unless elements[0].blank?
+                        .img.left= image_tag(elements[0])
+                      .message.left= elements[1].html_safe
+                      .clear
+        %li.dropdown.relationship_requests
+          %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown', :rel => @new_relationships_count}
+            .left.icon{:class => @new_relationships_count > 0 ? 'new' : 'up'}
+            - if @new_relationships_count > 0
+              .left.badge= @new_relationships_count
+            .clear
+          - unless @relationship_requests.nil?
+            %ul.dropdown-menu
+              %li.title Connection Requests
+              - if @relationship_requests.size == 0
+                %li.item= link_to 'You have no pending requests', '#'
+              - else
+                .scrollable
+                  - @relationship_requests.each do |r|
+                    %li.item
+                      .right= link_to 'Not Now', reject_relationship_path(r), :method => :post, :class => 'btn btn-small'
+                      .right= link_to 'Accept', approve_relationship_path(r), :method => :post, :class => 'btn btn-small btn-info'
+                      .img.left= link_to image_tag(r.entity.logo_url(:small)), r.entity
+                      .team.left= link_to r.entity.name, r.entity
+                      .clear
+        - if current_user.entrepreneur?
+          %li.dropdown.conversations
+            %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown', :rel => @unread_conversations_count}
+              .left.icon{:class => @unread_conversations_count > 0 ? 'new' : 'up'}
+              - if @unread_conversations_count > 0
+                .left.badge.badge-warning= @unread_conversations_count
+              .clear
+            - unless @conversation_statuses.nil?
+              %ul.dropdown-menu
+                %li.title
+                  Messages
+                  .right= link_to 'New Message', new_conversation_path
+                  .clear
+                - if @conversation_statuses.size == 0
+                  %li.item= link_to 'You don\'t have any messages', '#'
+                - else
+                  .scrollable
+                    - @conversation_statuses.first(20).each do |cs|
+                      - latest_message = @latest_message_by_conversation[cs.conversation_id]
+                      - participants = cs.conversation.participant_ids_without(current_user.id).map{|id| @users_by_id[id].present? ? @users_by_id[id] : nil }.compact
+                      - from = @users_by_id[latest_message.from_id]
+                      - name = ''
+                      - if cs.conversation.team_to_team?
+                        - other_startup = nil
+                        - participants.each do |u|
+                          - unless u.startup_id == current_user.startup_id
+                            - other_startup = u.startup
+                        - if other_startup.present?
+                          - pic_url = other_startup.logo_url(:small)
+                          - name = other_startup.name
+                      - elsif from.id == current_user.id
+                        - user = participants.first
+                        - pic_url = user.pic_url(:small)
+                        - if participants.size > 2
+                          - name = [participants.first.name, "#{participants.size - 1} others"].join(', ')
+                        - else
+                          - name = participants.map{|u| u.name }.to_sentence
+                      - pic_url ||= from.pic_url(:small)
+                      %li.item{:class => cs.unread? ? 'new' : '', :rel => conversation_path(cs.conversation)}
+                        .right.time_ago= time_for_conversation(latest_message.created_at)
+                        .img.left= image_tag(pic_url)
+                        .left
+                          .name= name
+                          .message
+                            - if from.id == current_user.id
+                              = image_tag 'reply_arrow.png'
+                            #{truncate(latest_message.content, :length => 80)}
+                        .clear
+                %li.title.link.center= link_to 'See All', conversations_path
+
+      %ul.nav.pull-right
+        - if current_user.entrepreneur? && current_user.startup.present?
+          %li{:class => is_controller_action?('relationships', 'index') ? 'active' : ''}= link_to "Work Room", work_room_path
+          %li{:class => is_controller_action?('posts') ? 'active' : ''}= link_to "Water Cooler", posts_path    
+        %li.dropdown
+          %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown'}
+            My Profile
+            %b.caret
+          %ul.dropdown-menu
+            %li= link_to 'View Profile', user_path(current_user)
+            %li= link_to 'Edit Profile', edit_user_path(current_user)
+            - if current_user.admin?
+              %li.divider
+              %li= link_to "Metrics", admin_metrics_path
+              %li= link_to "Admin Tools", "/admin/db"
+              %li= link_to "Approve Users", "/admin/users"
+              %li= link_to "Mentors", admin_mentors_path
+              %li= link_to "Job Queue", "/admin/resque"
+        - if current_user.entrepreneur? && current_user.startup.present?
+          %li.dropdown
+            %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown'}
+              My Startup
+              %b.caret
+            %ul.dropdown-menu
+              %li= link_to 'View Startup', startup_path(current_user.startup)
+              %li= link_to 'Edit Startup', edit_startup_path
+        %li= link_to "Log out", logout_path, :method => :delete
+
+- if @demo_day && !@home
+  .span4.countdown_and_checkin{:align => 'center'}
+    - if @demo_day && !@home
+      - if @demo_day.in_the_future?
+        %p Demo Day Starts In
+        = render 'layouts/countdown', :time => @demo_day.starts_at
+      - elsif @demo_day.in_the_past? && @next_demo_day
+        %p Next #{link_to(@next_demo_day.name, '/d')} starts on
+        %h3 #{@next_demo_day.starts_at.strftime('%B %d')} at 11AM PST
+      - elsif @demo_day.in_time_window?
+        %p
+          %strong #{link_to @demo_day.name, @demo_day}
+          ends in
+        = render 'layouts/countdown', :time => @demo_day.ends_at

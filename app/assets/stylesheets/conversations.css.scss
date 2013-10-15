@@ -1,0 +1,119 @@
+// Place all the styles related to the Conversations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.conversations {
+  .list_wrapper {
+    .head {
+      padding-right: 10px;
+      h3 { margin-top: 0; margin-bottom: 0; }
+      height: 40px;
+    }
+    height: 551px;
+    position: relative;
+    border-right: 1px solid #efefef;
+    .list {
+      overflow-y: auto;
+      height: 100%;
+      width: 100%;
+      border-top: 2px solid #efefef;
+      border-bottom: 1px solid #ccc;
+      .details {
+        border-bottom: 1px solid #efefef;
+        padding-right: 10px;
+        padding-top: 5px;
+        .names {
+          font-size: .9em;
+        }
+        .time, .last_message {
+          font-size: .8em;
+        }
+        .pic {
+          img { width: 50px; height: 50px; }
+          margin: 0 5px 5px 0;
+        }
+      }
+      .details:hover {
+        background-color: #efefef;
+        cursor: pointer;
+      }
+      .details.new {
+        background-color: #E9F8FF;
+      }
+    }
+  }
+  .conversation {
+    margin-left: -10px;
+    .head {
+      height: 30px;
+      padding-top: 10px;
+      h5 { margin-top: 0; margin-bottom: 0; }
+    }
+    .to {
+      h5 { margin-top: 0; margin-bottom: 0; }
+      height: 40px;
+      input { 
+        margin: 0 0 0 15px;
+      }
+    }
+    .new_message_area {
+      min-height: 110px;
+      background-color: #efefef;
+      padding: 15px;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      margin-left: -20px;
+      .content {
+        margin-left: 5px;
+      }
+      .button { 
+        margin-left: 5px;
+      }
+    }
+    .messages_wrapper {
+      margin-left: -20px;
+      padding-left: 20px;
+      position: relative;
+      height: 400px;
+      border-top: 2px solid #efefef;
+      padding-top: 10px;
+      //border-bottom: 2px solid #efefef;
+      .messages {
+        overflow-y: auto;
+        height: 100%;
+        width: 100%;
+        // position: absolute;
+        // bottom: 0px;
+        .message {
+          .pic { 
+            margin: 0 10px 10px 0;
+            width: 50px;
+          }
+          .content_wrapper {
+            width:  500px; 
+            .content {
+              margin-top: 5px;
+              p {
+                font-size: 1em;
+              }
+            }
+            .from_user { 
+              font-size: .9em;
+              font-weight: bold;
+            }
+            .from_company {
+              font-size: .9em;
+              color: #ccc;
+              a {
+                color: #ccc;
+                font-weight: normal;
+              }
+            }
+            .time_ago { font-size: .8em; }
+          }
+        }
+      }
+    }
+  }
+
+}

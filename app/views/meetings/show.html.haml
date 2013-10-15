@@ -1,0 +1,50 @@
+- content_for :subtitle do
+  #{@meeting.location_name} Meeting
+
+.row
+  .span6
+    %h2 #{@meeting.location_name} Meeting
+  .span6{:align => 'right'}
+    = link_to 'All Meetings', meetings_path
+    - if @can_edit
+      &nbsp;&nbsp;
+      = link_to 'Edit Meeting', edit_meeting_path(@meeting), :class => 'btn'
+      - if @attendees.size > 0
+        &nbsp&nbsp;
+        = link_to '<i class="icon icon-envelope"></i> Message Attendees'.html_safe, new_meeting_meeting_message_path(:meeting_id => @meeting.id), :class => 'btn'
+.row
+  .span12
+    %p Meet every #{@meeting.day_of_week_human} at #{@meeting.start_time}
+    %p
+      %strong= @meeting.venue_name
+      \-
+      = @meeting.venue_url.blank? ? @meeting.venue_address : link_to(@meeting.venue_address.blank? ? 'View Details/Map' : @meeting.venue_address, @meeting.venue_url, :target => '_blank')
+    - unless @meeting.organizer.blank?
+      %p
+        Organizer: #{@meeting.organizer.name}
+        - unless @meeting.organizer.phone.blank?
+          (#{@meeting.organizer.phone})
+- if @organizer == true
+  %hr{:style => 'margin: 20px 0 20px 0'}
+  .row
+    .span12
+      - if @attendees.size == 0
+        %h4 There aren't any attendees registered for this meeting.
+      - else
+        %h4 All Attendees
+        %table.table
+          %thead
+            %tr
+              %th Person
+              %th Startup
+              %th Twitter
+              %th Phone
+          %tbody
+            - @attendees.each do |u|
+              %tr
+                %td
+                  = link_to image_tag(user_avatar_url(u)), u
+                  = link_to u.name, u
+                %td= u.startup.blank? ? '' : link_to(u.startup.name, u.startup)
+                %td= u.twitter.blank? ? '' : link_to_twitter(u.twitter)
+                %td= u.phone

@@ -1,0 +1,115 @@
+- content_for :subtitle do
+  Progress Update For Week of #{@checkin.time_label}
+
+- team_members = @checkin.startup.team_members
+.checkins
+  .checkin
+    -# Show team nav if this is someone else's check-ins
+    .team_and_nav
+      .row
+        .span3
+          .all_teams= link_to '<i class="icon icon-chevron-left"></i> All Teams'.html_safe, relationships_path, :class => 'btn'
+        .span8
+          .left.team_members
+            %p Weekly Progress Update  
+            %p for #{@checkin.time_label}
+          .left.team_members
+            - team_members.each do |tm|
+              - title = tm.name + (!tm.twitter.blank? ? " - @#{tm.twitter}" : '')
+              .inline-block{:style => 'margin-left: 0px'}= link_to(image_tag(user_avatar_url(tm), :title => title, :style => 'width: 50px; height: 50px;'), user_path(tm))
+          .left
+            %h4.name_and_link
+              = link_to "Team #{@checkin.startup.name}", startup_path(@checkin.startup)
+              - if @checkin.startup.website_url.present? && @checkin.startup.website_url_to_uri.present?
+                &nbsp;•&nbsp;
+                = link_to_external @checkin.startup.website_url_to_uri.hostname, @checkin.startup.website_url, :source => 'checkin'
+            - unless @checkin.startup.one_liner.blank?
+              %h5 "#{@checkin.startup.one_liner}"
+    .row
+      .span3
+        .goal_wrapper.previous_week
+          %h3
+            .left.previous_week_link
+              - if @previous_checkin.present?
+                = link_to '<i class="icon-chevron-left"></i>'.html_safe, @previous_checkin, :class => 'btn'
+            .left
+              This Week's Goal
+            .clear
+          %p.goal= h(@checkin.goal)
+
+          - if @checkin.accomplished == true
+            %h3.accomplished
+              = image_tag 'goal_accomplished.png'
+              Accomplished!
+          - elsif @checkin.accomplished == false
+            %h3.missed
+              = image_tag 'goal_missed.png'
+              Missed
+
+          - if @checkin.before_video.present? || @checkin.start_video_url.present?
+            .before_video
+              = link_to 'View Before Video', '#', :onclick => "$('#before_video').modal(); return false;"
+              #before_video.modal.hide
+                .modal-header
+                  %button.close{:type => 'button', 'data-dismiss' => 'modal'} x
+                  %h3 Before Video
+                .modal-body
+                  = display_checkin_video(@checkin, :before_video, false, 600, 387).html_safe
+      .span6
+        -# 600, 387
+        .video.well.center= display_checkin_video(@checkin, :video, false, 530, 320).html_safe
+
+        .right.posted_at
+          - t = @checkin.video.present? ? @checkin.video.created_at : @checkin.updated_at
+          - if t.present?
+            Posted #{t.strftime('%B %-d at %-l:%M%P')}
+
+        - if @checkin.completed?
+          .left!= render_awesome_button(@checkin)
+        .left.awesome_comment_count
+          - show_from = false
+          %p
+            = awesome_comment_count_summary(@checkin)
+        .clear
+
+        .participants
+          - @checkin.participants.each do |p|
+            .left= link_to image_tag(p.pic_url(:small)), p, :title => p.name, :alt => p.name
+          .clear
+
+        - unless @checkin.notes.blank?
+          %p{:style => 'margin-top: 10px'}= simple_format(auto_link(h(@checkin.notes), :all, :target => '_blank' ))
+      .span3
+        .goal_wrapper.next_week
+          %h3
+            .right.next_week_link
+              - if @next_checkin.present?
+                = link_to '<i class="icon-chevron-right"></i>'.html_safe, @next_checkin, :class => 'btn'
+            .left
+              Next Week's Goal
+            .clear
+          - if @next_checkin.present?
+            %p.goal= h(@next_checkin.goal)
+
+            - if @next_checkin.accomplished.nil? && !@next_checkin.completed?
+              %h3.in_progress
+                .left.box
+                .left In Progress
+            - else
+              - if @checkin.accomplished == true
+                %h3.accomplished
+                  = image_tag 'goal_accomplished.png'
+                  Accomplished!
+              - elsif @checkin.accomplished == false
+                %h3.missed
+                  = image_tag 'goal_missed.png'
+                  Missed
+          - else
+            %p.goal (None set)
+    %hr/
+    .row{:style => 'margin-top: 15px'}
+      .span12
+        #comments
+          = render :partial => 'comments/form', :object => @new_comment
+          .list
+            = nested_comments @comments

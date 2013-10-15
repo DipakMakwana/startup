@@ -1,0 +1,93 @@
+- content_for :subtitle do
+  Add Teams
+
+.relationships
+  / .row
+  /   .span4= link_to '<i class="icon-arrow-left"></i> Back'.html_safe, relationships_path, :class => 'btn btn-large'
+  /   .span3{:align => 'center'}
+  /     %h2 
+  /       %small Add Teams
+  /   .span5{:align => 'right'}
+  /     = form_for Invite.new, :url => invite_with_confirm_startups_path, :remote => true, :html => { :class => 'form-inline invite_form' } do |f|
+  /       %p Search by Startup Name
+  /       = text_field_tag 'startup_name', '', :placeholder => 'Startup Name', :class => 'startups-autocomplete'
+  /       = f.submit 'Search'.html_safe, :class => 'btn'
+  / %hr/
+  / %br/
+
+  .relationship_request
+    .header
+      .row
+        .span10
+          - if !@relationship.new_record?
+            %h4.bold Connection Request from #{@review_startup.team_members.map{|u| u.name }.join(', ')} of Team #{@review_startup.name}
+            - if @relationship.message.present?
+              .message= simple_format(h("\"#{@relationship.message}\""))
+          - else
+            .row
+              .span3
+                %h4.bold Suggested Connection
+              .span6
+                .center
+                  - if @pct_complete < 100
+                    %h4 You have less than #{Startup::NUM_ACTIVE_REQUIRED} active teams. Please invite #{@num_left_to_invite} more #{@num_left_to_invite == 1 ? 'startup' : 'startups'} to connect.
+                    .progress{:align => 'left'}
+                      .bar{:style => "width: #{@pct_complete}%"}
+                    %p Having #{Startup::NUM_ACTIVE_REQUIRED}+ active teams gives more opportunity for collaboration
+        .span2{:align => 'right'}
+          - if @relationship.new_record?
+            = link_to 'Invite & Next <i class="icon-arrow-right icon-white"></i>'.html_safe, '#', :class => 'btn btn-large btn-success', :onclick => "$('.relationship_request.modal').modal(); return false;" 
+            %br/
+            = link_to 'Next <i class="icon-arrow-right"></i>'.html_safe, skip_team_relationships_path(:startup_id => @review_startup.id), :method => :post, :class => 'btn btn-large'
+          - else
+            = link_to 'Connect & Next <i class="icon-arrow-right icon-white"></i>'.html_safe, approve_relationship_path(@relationship), :method => :post, :class => 'btn btn-large btn-success'
+            %br/
+            = link_to 'Next <i class="icon-arrow-right"></i>'.html_safe, reject_relationship_path(@relationship), :method => :post, :class => 'btn btn-large'
+      %hr/
+      .startup
+        .row
+          .span12
+            .square.logo_and_details
+              .rounded= image_tag @review_startup.logo_url(:square)
+              %center
+                .name= link_to @review_startup.name, @review_startup
+                .one_liner= @review_startup.one_liner
+
+              - if @startups_in_common.present?
+                .startups_in_common
+                  - @startups_in_common.each do |s|
+                    = link_to image_tag(s.logo_url(:small), :title => s.name, :alt => s.name, :class => 'rounded'), s
+                  %br/
+                  #{pluralize(@startups_in_common.size, 'Connection')} in Common
+
+            .left.stats.center
+              .stat
+                %h2 #{@review_startup.rating.blank? ? 0 : @review_startup.rating.round(2)}
+                Community Rating
+              .stat
+                %h2 #{@num_checkins}
+                Weeks Worked
+              .stat
+                %h2 #{@num_awesomes}
+                Awesomes
+            - @review_startup.team_members.shuffle.first(3).each do |tm|
+              .team_member.square
+                .rounded= image_tag(tm.pic_url(:square), :title => tm.name)
+                %center
+                  .name= h(tm.name)
+                  - if tm.location.blank?
+                    .location &nbsp;
+                  - else
+                    .location= h(tm.location)
+                  = render 'users/profile_icons', :user => tm, :source => 'add_teams'
+            .clear
+            
+
+      - if @review_startup.website_url.present? && @review_startup.website_url_to_uri.present?
+        .website.center
+          = link_to_external "#{@review_startup.name.possessive} Website", @review_startup.website_url, :source => 'add_teams'
+          %hr/
+          %iframe.iframe{:width => '100%', :height => 600, :frameborder => 0, :src => @review_startup.website_url}
+
+- if @relationship.new_record?
+  = render 'relationships/request_modal', :relationship => @relationship, :form_id => 'add_teams_request', :not_remote => true

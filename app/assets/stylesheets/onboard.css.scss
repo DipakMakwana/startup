@@ -1,0 +1,78 @@
+.onboard {
+  .buttons, .buttons input, .buttons a {
+    font-size: 30px;
+    line-height:45px;
+    font-weight: bold;
+  }
+  .form-actions {
+    border: 0px;
+    background-color: transparent;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+
+  .status_bar {
+    .text {
+      padding-left: 160px;
+    }
+    .button {
+      padding-left: 15px;
+    }
+  }
+}
+
+// Same progress bar for onbaording and checkins
+.onboard, .checkins {
+
+  .formbtn {
+    font-size:80px; 
+    color:#25A6E9; 
+    line-height:75px;
+    padding-top: 20px;
+  }
+  .navbar {
+    margin-top: 0px;
+    margin-bottom: 25px;
+    margin-left:110px;
+    .navbar-inner {
+      padding-left: 0px;
+      padding-right: 0px;
+      background-color: #Fff;
+      box-shadow: none;
+      border: 0;
+      background-image: none;
+      .nav {
+        margin-left: auto;
+        margin-right: auto;
+        left: 1%;
+        li.completed a, li.active a {
+          background-color: #57C7FF;
+        }
+        li.completed a {
+          color: #A7E1FF;
+        }
+        li a {
+          font-size: 1.3em;
+          line-height: 25px;
+          background-color: #F8F8F8;
+          font-weight: bold;
+          padding-left: 29px;
+          padding-right: 29px;
+          text-shadow: none;
+          color:#666;
+        }
+        li a:hover {
+          color: #000;
+        }
+      }
+    }
+  }
+  .title {
+    font-size:35px; 
+    line-height: 40px; 
+    color:#666666;
+    font-weight: bold;
+    padding-top:25px;
+  }
+}

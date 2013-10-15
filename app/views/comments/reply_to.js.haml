@@ -1,0 +1,10 @@
+:plain
+  parent = $('#comment_#{@comment.parent_id}');
+
+  /* Add new comment form */
+  parent.append("<div class='nested_comments'>#{escape_javascript(render(:partial => 'form', :object => @comment, :locals => {:cancel_link => true}))}</div>");
+
+  /* Place focus on textarea */
+  parent.find('.new_comment textarea').first().focus().autosize();
+
+- flash.discard
