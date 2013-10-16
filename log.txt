@@ -1,0 +1,829 @@
+Running `rake db:migrate --trace` attached to terminal... up, run.8430
+DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
+DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
+** Invoke db:migrate (first_time)
+** Invoke environment (first_time)
+** Invoke disable_rails_admin_initializer (first_time)
+** Execute disable_rails_admin_initializer
+** Execute environment
+** Invoke db:load_config (first_time)
+** Execute db:load_config
+** Execute db:migrate
+==  DeviseCreateUsers: migrating ==============================================
+-- create_table(:users)
+NOTICE:  CREATE TABLE will create implicit sequence "users_id_seq" for serial column "users.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "users_pkey" for table "users"
+   -> 0.0470s
+-- add_index(:users, :email, {:unique=>true})
+   -> 0.0069s
+-- add_index(:users, :reset_password_token, {:unique=>true})
+   -> 0.0086s
+==  DeviseCreateUsers: migrated (0.0650s) =====================================
+
+==  CreateStartups: migrating =================================================
+-- create_table(:startups)
+NOTICE:  CREATE TABLE will create implicit sequence "startups_id_seq" for serial column "startups.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "startups_pkey" for table "startups"
+   -> 0.0186s
+-- add_index(:startups, :public)
+   -> 0.0075s
+==  CreateStartups: migrated (0.0298s) ========================================
+
+==  CreateMeetings: migrating =================================================
+-- create_table(:meetings)
+NOTICE:  CREATE TABLE will create implicit sequence "meetings_id_seq" for serial column "meetings.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "meetings_pkey" for table "meetings"
+   -> 0.0624s
+==  CreateMeetings: migrated (0.0636s) ========================================
+
+==  CreateAuthentications: migrating ==========================================
+-- create_table(:authentications)
+NOTICE:  CREATE TABLE will create implicit sequence "authentications_id_seq" for serial column "authentications.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "authentications_pkey" for table "authentications"
+   -> 0.0244s
+-- add_index(:authentications, [:provider, :uid])
+   -> 0.0121s
+==  CreateAuthentications: migrated (0.0412s) =================================
+
+==  CreateCheckins: migrating =================================================
+-- create_table(:checkins)
+NOTICE:  CREATE TABLE will create implicit sequence "checkins_id_seq" for serial column "checkins.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "checkins_pkey" for table "checkins"
+   -> 0.0317s
+-- add_index(:checkins, [:startup_id, :created_at])
+   -> 0.0237s
+==  CreateCheckins: migrated (0.0568s) ========================================
+
+==  ActsAsTaggableOnMigration: migrating ======================================
+-- create_table(:tags)
+NOTICE:  CREATE TABLE will create implicit sequence "tags_id_seq" for serial column "tags.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "tags_pkey" for table "tags"
+   -> 0.0121s
+-- create_table(:taggings)
+NOTICE:  CREATE TABLE will create implicit sequence "taggings_id_seq" for serial column "taggings.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "taggings_pkey" for table "taggings"
+   -> 0.0176s
+-- add_index(:taggings, :tag_id)
+   -> 0.0097s
+-- add_index(:taggings, [:taggable_id, :taggable_type, :context])
+   -> 0.0540s
+==  ActsAsTaggableOnMigration: migrated (0.0968s) =============================
+
+==  CreateInstruments: migrating ==============================================
+-- create_table(:instruments)
+NOTICE:  CREATE TABLE will create implicit sequence "instruments_id_seq" for serial column "instruments.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "instruments_pkey" for table "instruments"
+   -> 0.0084s
+==  CreateInstruments: migrated (0.0087s) =====================================
+
+==  CreateMessages: migrating =================================================
+-- create_table(:messages)
+NOTICE:  CREATE TABLE will create implicit sequence "messages_id_seq" for serial column "messages.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "messages_pkey" for table "messages"
+   -> 0.0302s
+-- add_index(:messages, [:recipient_id, :folder, :read_at], {:name=>"messages_comp_index"})
+   -> 0.0135s
+==  CreateMessages: migrated (0.0563s) ========================================
+
+==  AddPhoneToUser: migrating =================================================
+-- add_column(:users, :phone, :string)
+   -> 0.0034s
+==  AddPhoneToUser: migrated (0.0037s) ========================================
+
+==  AddHipchatToUser: migrating ===============================================
+-- add_column(:users, :hipchat_username, :string)
+   -> 0.0278s
+-- add_column(:users, :hipchat_password, :string)
+   -> 0.0036s
+==  AddHipchatToUser: migrated (0.0393s) ======================================
+
+==  CreateRelationships: migrating ============================================
+-- create_table(:relationships)
+NOTICE:  CREATE TABLE will create implicit sequence "relationships_id_seq" for serial column "relationships.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "relationships_pkey" for table "relationships"
+   -> 0.0129s
+-- add_index(:relationships, [:startup_id, :connected_with_id, :status], {:name=>"relationship_index", :unique=>true})
+   -> 0.0132s
+==  CreateRelationships: migrated (0.0294s) ===================================
+
+==  CreateComments: migrating =================================================
+-- create_table(:comments)
+NOTICE:  CREATE TABLE will create implicit sequence "comments_id_seq" for serial column "comments.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "comments_pkey" for table "comments"
+   -> 0.0533s
+-- add_index(:comments, :checkin_id)
+   -> 0.0105s
+==  CreateComments: migrated (0.0657s) ========================================
+
+==  RemoveStartupFlagFromUserEtc: migrating ===================================
+-- remove_column(:users, :startup)
+   -> 0.1879s
+-- remove_column(:startups, :product_url)
+   -> 0.0018s
+-- rename_column(:startups, :location_name, :location)
+   -> 0.0097s
+==  RemoveStartupFlagFromUserEtc: migrated (0.2007s) ==========================
+
+==  CreateRailsAdminHistoriesTable: migrating =================================
+-- create_table(:rails_admin_histories)
+NOTICE:  CREATE TABLE will create implicit sequence "rails_admin_histories_id_seq" for serial column "rails_admin_histories.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "rails_admin_histories_pkey" for table "rails_admin_histories"
+   -> 0.0189s
+-- add_index(:rails_admin_histories, [:item, :table, :month, :year], {:name=>"index_rails_admin_histories"})
+   -> 0.0251s
+==  CreateRailsAdminHistoriesTable: migrated (0.0454s) ========================
+
+==  CreateAwesomes: migrating =================================================
+-- create_table(:awesomes)
+NOTICE:  CREATE TABLE will create implicit sequence "awesomes_id_seq" for serial column "awesomes.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "awesomes_pkey" for table "awesomes"
+   -> 0.0297s
+-- add_index(:awesomes, [:user_id, :awsm_type, :awsm_id], {:name=>"awesomes_index", :unique=>true})
+   -> 0.0426s
+-- add_column(:checkins, :awesome_count, :integer, {:default=>0})
+   -> 0.0346s
+-- add_column(:comments, :awesome_count, :integer, {:default=>0})
+   -> 0.0153s
+==  CreateAwesomes: migrated (0.1272s) ========================================
+
+==  CreateUserActions: migrating ==============================================
+-- create_table(:user_actions)
+NOTICE:  CREATE TABLE will create implicit sequence "user_actions_id_seq" for serial column "user_actions.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "user_actions_pkey" for table "user_actions"
+   -> 0.0204s
+==  CreateUserActions: migrated (0.0231s) =====================================
+
+==  CreateNotifications: migrating ============================================
+-- create_table(:notifications)
+NOTICE:  CREATE TABLE will create implicit sequence "notifications_id_seq" for serial column "notifications.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "notifications_pkey" for table "notifications"
+   -> 0.0205s
+-- add_index(:notifications, [:user_id, :read_at])
+   -> 0.0125s
+-- add_column(:users, :settings, :text)
+   -> 0.0078s
+==  CreateNotifications: migrated (0.1097s) ===================================
+
+==  AddTextFieldToCheckins: migrating =========================================
+-- add_column(:checkins, :start_comments, :text)
+   -> 0.0069s
+==  AddTextFieldToCheckins: migrated (0.1120s) ================================
+
+==  AddMeetingToUser: migrating ===============================================
+-- add_column(:users, :meeting_id, :integer)
+   -> 0.0104s
+==  AddMeetingToUser: migrated (0.3680s) ======================================
+
+==  CreateMeetingMessages: migrating ==========================================
+-- create_table(:meeting_messages)
+NOTICE:  CREATE TABLE will create implicit sequence "meeting_messages_id_seq" for serial column "meeting_messages.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "meeting_messages_pkey" for table "meeting_messages"
+   -> 0.0667s
+-- add_index(:meeting_messages, :meeting_id)
+   -> 0.0076s
+==  CreateMeetingMessages: migrated (0.0745s) =================================
+
+==  AddUnreadNcToUser: migrating ==============================================
+-- add_column(:users, :unread_nc, :integer, {:default=>0})
+   -> 0.0186s
+==  AddUnreadNcToUser: migrated (0.0190s) =====================================
+
+==  AddCommentCountAndElevatorPitch: migrating ================================
+-- add_column(:checkins, :comment_count, :integer, {:default=>0})
+   -> 0.0358s
+-- add_column(:startups, :elevator_pitch, :text)
+   -> 0.0024s
+==  AddCommentCountAndElevatorPitch: migrated (0.0421s) =======================
+
+==  AddFieldsToUser: migrating ================================================
+-- add_column(:users, :one_liner, :string)
+   -> 0.0044s
+-- add_column(:users, :bio, :text)
+   -> 0.1264s
+-- add_column(:users, :github_url, :string)
+   -> 0.0025s
+-- add_column(:users, :dribbble_url, :string)
+   -> 0.0017s
+-- add_column(:users, :blog_url, :string)
+   -> 0.0135s
+==  AddFieldsToUser: migrated (0.1533s) =======================================
+
+==  CreateInvites: migrating ==================================================
+-- create_table(:invites)
+NOTICE:  CREATE TABLE will create implicit sequence "invites_id_seq" for serial column "invites.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "invites_pkey" for table "invites"
+   -> 0.0274s
+-- add_index(:invites, :code)
+   -> 0.0092s
+==  CreateInvites: migrated (0.0384s) =========================================
+
+==  ThreadedComments: migrating ===============================================
+-- add_column(:comments, :ancestry, :string)
+   -> 0.0035s
+-- add_index(:comments, :ancestry)
+   -> 0.0717s
+==  ThreadedComments: migrated (0.0806s) ======================================
+
+==  RemovePaperclipAddCarrierwave: migrating ==================================
+-- remove_column(:startups, :logo_file_name)
+   -> 0.0039s
+-- remove_column(:startups, :logo_content_type)
+   -> 0.0035s
+-- remove_column(:startups, :logo_file_size)
+   -> 0.0016s
+-- remove_column(:startups, :logo_updated_at)
+   -> 0.0020s
+-- remove_column(:users, :pic_file_name)
+   -> 0.0021s
+-- remove_column(:users, :pic_content_type)
+   -> 0.0021s
+-- remove_column(:users, :pic_file_size)
+   -> 0.0016s
+-- remove_column(:users, :pic_updated_at)
+   -> 0.0015s
+-- add_column(:startups, :logo, :string)
+   -> 0.0211s
+-- add_column(:users, :pic, :string)
+   -> 0.0057s
+==  RemovePaperclipAddCarrierwave: migrated (0.0509s) =========================
+
+==  CreateNudges: migrating ===================================================
+-- create_table(:nudges)
+NOTICE:  CREATE TABLE will create implicit sequence "nudges_id_seq" for serial column "nudges.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "nudges_pkey" for table "nudges"
+   -> 0.0143s
+==  CreateNudges: migrated (0.0215s) ==========================================
+
+==  AddStatsToUserAndStartup: migrating =======================================
+-- add_column(:users, :rating, :float)
+   -> 0.0070s
+-- add_column(:startups, :rating, :float)
+   -> 0.0017s
+==  AddStatsToUserAndStartup: migrated (0.0090s) ==============================
+
+==  PublicCheckins: migrating =================================================
+-- add_column(:startups, :checkins_public, :boolean, {:default=>false})
+   -> 0.0160s
+==  PublicCheckins: migrated (0.0162s) ========================================
+
+==  RelationshipsPolymorphic: migrating =======================================
+-- rename_column(:relationships, :startup_id, :entity_id)
+   -> 0.0074s
+-- add_column(:relationships, :entity_type, :string, {:length=>10})
+   -> 0.0049s
+-- add_column(:relationships, :connected_with_type, :string, {:length=>10})
+   -> 0.0459s
+-- remove_index(:relationships, {:name=>"relationship_index"})
+   -> 0.0082s
+-- add_index(:relationships, [:entity_id, :entity_type, :status], {:name=>"relationship_index"})
+   -> 0.0101s
+==  RelationshipsPolymorphic: migrated (0.1666s) ==============================
+
+==  AddOnboardingStepToUser: migrating ========================================
+-- add_column(:users, :onboarding_step, :integer, {:default=>1, :length=>2})
+   -> 0.0208s
+-- add_column(:users, :intro_video_url, :string)
+   -> 0.0018s
+==  AddOnboardingStepToUser: migrated (0.0256s) ===============================
+
+==  AddRolesToUser: migrating =================================================
+-- add_column(:users, :roles, :integer, {:length=>15})
+   -> 0.0026s
+-- add_index(:users, :startup_id)
+   -> 0.0160s
+-- add_index(:users, :roles)
+   -> 0.0222s
+==  AddRolesToUser: migrated (0.0510s) ========================================
+
+==  RemoveDashesFromTags: migrating ===========================================
+==  RemoveDashesFromTags: migrated (0.0133s) ==================================
+
+==  AddMessageToRelationship: migrating =======================================
+-- add_column(:relationships, :message, :text)
+   -> 0.0026s
+==  AddMessageToRelationship: migrated (0.0031s) ==============================
+
+==  AddWeekToCheckin: migrating ===============================================
+-- add_column(:checkins, :week, :integer, {:length=>6})
+   -> 0.0022s
+==  AddWeekToCheckin: migrated (0.0046s) ======================================
+
+==  CreateVersions: migrating =================================================
+-- create_table(:versions)
+NOTICE:  CREATE TABLE will create implicit sequence "versions_id_seq" for serial column "versions.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "versions_pkey" for table "versions"
+   -> 0.0129s
+-- add_index(:versions, [:item_type, :item_id])
+   -> 0.0077s
+==  CreateVersions: migrated (0.0213s) ========================================
+
+==  ChangeCompanyGoalGrowthModelToInteger: migrating ==========================
+-- add_column(:startups, :pitch_video_url, :string)
+   -> 0.0030s
+==  ChangeCompanyGoalGrowthModelToInteger: migrated (0.0546s) =================
+
+==  AddContextToRelationshipAndOnboardingOnUsers: migrating ===================
+-- add_column(:users, :onboarded, :integer, {:length=>20})
+   -> 0.0032s
+-- add_column(:relationships, :context, :integer, {:length=>10})
+   -> 0.0047s
+==  AddContextToRelationshipAndOnboardingOnUsers: migrated (0.0099s) ==========
+
+==  CleanupUserTable: migrating ===============================================
+-- add_column(:users, :email_on, :integer)
+   -> 0.0023s
+-- remove_column(:users, :mentor)
+   -> 0.0030s
+-- remove_column(:users, :investor)
+   -> 0.0017s
+-- remove_column(:users, :onboarding_step)
+   -> 0.0014s
+-- remove_column(:users, :settings)
+   -> 0.0013s
+-- add_column(:users, :setup, :integer)
+   -> 0.0013s
+-- add_column(:startups, :setup, :integer)
+   -> 0.0013s
+==  CleanupUserTable: migrated (0.0170s) ======================================
+
+==  AddNameToInvite: migrating ================================================
+-- add_column(:invites, :name, :string)
+   -> 0.0017s
+==  AddNameToInvite: migrated (0.0022s) =======================================
+
+==  AddInviteToNudge: migrating ===============================================
+-- add_column(:nudges, :invite_id, :integer)
+   -> 0.0309s
+==  AddInviteToNudge: migrated (0.0311s) ======================================
+
+==  CreateDemoDays: migrating =================================================
+-- create_table(:demo_days)
+NOTICE:  CREATE TABLE will create implicit sequence "demo_days_id_seq" for serial column "demo_days.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "demo_days_pkey" for table "demo_days"
+   -> 0.0147s
+==  CreateDemoDays: migrated (0.1705s) ========================================
+
+==  CreateRsvps: migrating ====================================================
+-- create_table(:rsvps)
+NOTICE:  CREATE TABLE will create implicit sequence "rsvps_id_seq" for serial column "rsvps.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "rsvps_pkey" for table "rsvps"
+   -> 0.0289s
+==  CreateRsvps: migrated (0.0291s) ===========================================
+
+==  AddAccreditedInvestorToRsvp: migrating ====================================
+-- add_column(:rsvps, :accredited, :boolean)
+   -> 0.0036s
+==  AddAccreditedInvestorToRsvp: migrated (0.0041s) ===========================
+
+==  ChangeInstrumentsTable: migrating =========================================
+-- remove_column(:instruments, :data)
+   -> 0.0020s
+-- remove_column(:instruments, :inst_type)
+   -> 0.0014s
+-- add_column(:instruments, :startup_id, :integer)
+   -> 0.0014s
+-- add_column(:instruments, :name, :string)
+   -> 0.0021s
+-- add_column(:instruments, :description, :text)
+   -> 0.0091s
+==  ChangeInstrumentsTable: migrated (0.0276s) ================================
+
+==  CreateMeasurements: migrating =============================================
+-- create_table(:measurements)
+NOTICE:  CREATE TABLE will create implicit sequence "measurements_id_seq" for serial column "measurements.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "measurements_pkey" for table "measurements"
+   -> 0.0094s
+==  CreateMeasurements: migrated (0.0097s) ====================================
+
+==  CreateSlideDecks: migrating ===============================================
+-- create_table(:slide_decks)
+NOTICE:  CREATE TABLE will create implicit sequence "slide_decks_id_seq" for serial column "slide_decks.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "slide_decks_pkey" for table "slide_decks"
+   -> 0.0162s
+==  CreateSlideDecks: migrated (0.0197s) ======================================
+
+==  CreateRatings: migrating ==================================================
+-- create_table(:ratings)
+NOTICE:  CREATE TABLE will create implicit sequence "ratings_id_seq" for serial column "ratings.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ratings_pkey" for table "ratings"
+   -> 0.0134s
+==  CreateRatings: migrated (0.0138s) =========================================
+
+==  CreateVideos: migrating ===================================================
+-- create_table(:videos)
+NOTICE:  CREATE TABLE will create implicit sequence "videos_id_seq" for serial column "videos.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "videos_pkey" for table "videos"
+   -> 0.0141s
+==  CreateVideos: migrated (0.0149s) ==========================================
+
+==  AddPendingAtToRelationships: migrating ====================================
+-- add_column(:relationships, :pending_at, :datetime)
+   -> 0.0127s
+==  AddPendingAtToRelationships: migrated (0.0257s) ===========================
+
+==  AddInvestableFieldsToStartup: migrating ===================================
+-- add_column(:startups, :investable, :boolean, {:default=>false})
+   -> 0.0170s
+==  AddInvestableFieldsToStartup: migrated (0.0219s) ==========================
+
+==  CreateScreenshots: migrating ==============================================
+-- create_table(:screenshots)
+NOTICE:  CREATE TABLE will create implicit sequence "screenshots_id_seq" for serial column "screenshots.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "screenshots_pkey" for table "screenshots"
+   -> 0.0313s
+==  CreateScreenshots: migrated (0.0338s) =====================================
+
+==  ModifyVideoTable: migrating ===============================================
+-- remove_column(:videos, :video_type)
+   -> 0.0079s
+-- remove_column(:videos, :callback_result)
+   -> 0.0057s
+-- rename_column(:videos, :file_url, :local_file_path)
+   -> 0.0075s
+-- add_column(:videos, :vimeod, :boolean, {:default=>false})
+   -> 0.0126s
+-- add_column(:videos, :type, :string)
+   -> 0.0176s
+==  ModifyVideoTable: migrated (0.0654s) ======================================
+
+==  AddEmailedAtToInvites: migrating ==========================================
+-- add_column(:invites, :emailed_at, :datetime)
+   -> 0.0131s
+==  AddEmailedAtToInvites: migrated (0.0171s) =================================
+
+==  AddWeekToStartup: migrating ===============================================
+-- add_column(:startups, :week, :integer)
+   -> 0.0465s
+-- add_index(:startups, :week)
+   -> 0.0460s
+==  AddWeekToStartup: migrated (0.1041s) ======================================
+
+==  AddVideoIdsToModels: migrating ============================================
+-- add_column(:checkins, :before_video_id, :integer)
+   -> 0.0030s
+-- add_column(:checkins, :after_video_id, :integer)
+   -> 0.0034s
+-- add_column(:startups, :intro_video_id, :integer)
+   -> 0.0066s
+-- add_column(:startups, :pitch_video_id, :integer)
+   -> 0.0054s
+-- add_column(:users, :intro_video_id, :integer)
+   -> 0.0067s
+-- add_column(:videos, :title, :string)
+   -> 0.0041s
+==  AddVideoIdsToModels: migrated (0.0598s) ===================================
+
+==  AddStartuptoVideos: migrating =============================================
+-- add_column(:videos, :startup_id, :integer)
+   -> 0.0023s
+==  AddStartuptoVideos: migrated (0.0041s) ====================================
+
+==  AddFieldsToStartup: migrating =============================================
+-- add_column(:startups, :business_model, :text)
+   -> 0.0034s
+-- add_column(:startups, :founding_date, :date)
+   -> 0.0018s
+-- add_column(:startups, :market_size, :string)
+   -> 0.0015s
+==  AddFieldsToStartup: migrated (0.0073s) ====================================
+
+==  AddValueToRating: migrating ===============================================
+-- add_column(:ratings, :value, :integer)
+   -> 0.0022s
+==  AddValueToRating: migrated (0.0024s) ======================================
+
+==  AddMeasurementIdToCheckin: migrating ======================================
+-- add_column(:checkins, :measurement_id, :integer)
+   -> 0.0017s
+==  AddMeasurementIdToCheckin: migrated (0.0018s) =============================
+
+==  AddImageToVideo: migrating ================================================
+-- add_column(:videos, :image, :string)
+   -> 0.0021s
+==  AddImageToVideo: migrated (0.0025s) =======================================
+
+==  ChangeFieldsOnRating: migrating ===========================================
+-- rename_column(:ratings, :value, :contact_in)
+   -> 0.0025s
+-- add_column(:ratings, :weakest_element, :integer)
+   -> 0.0013s
+==  ChangeFieldsOnRating: migrated (0.0055s) ==================================
+
+==  AddConnectedToRating: migrating ===========================================
+-- add_column(:ratings, :connected, :boolean)
+   -> 0.0064s
+==  AddConnectedToRating: migrated (0.0110s) ==================================
+
+==  RenameRatingsColumnToUser: migrating ======================================
+-- rename_column(:ratings, :investor_id, :user_id)
+   -> 0.0030s
+==  RenameRatingsColumnToUser: migrated (0.0055s) =============================
+
+==  AddInstrumentTypeToInstruments: migrating =================================
+-- add_column(:instruments, :instrument_type_id, :integer)
+   -> 0.0391s
+-- add_index(:instruments, :startup_id)
+   -> 0.0079s
+==  AddInstrumentTypeToInstruments: migrated (0.0480s) ========================
+
+==  AddStartupIdsToDemoDay: migrating =========================================
+-- add_column(:demo_days, :startup_ids, :string)
+   -> 0.0018s
+==  AddStartupIdsToDemoDay: migrated (0.0020s) ================================
+
+==  CreateQuestions: migrating ================================================
+-- create_table(:questions)
+NOTICE:  CREATE TABLE will create implicit sequence "questions_id_seq" for serial column "questions.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "questions_pkey" for table "questions"
+   -> 0.0281s
+-- add_column(:users, :followers_count, :integer)
+   -> 0.0022s
+==  CreateQuestions: migrated (0.0328s) =======================================
+
+==  AddTokboxSessionToStartup: migrating ======================================
+-- add_column(:startups, :tokbox_session_id, :string)
+   -> 0.0026s
+==  AddTokboxSessionToStartup: migrated (0.0032s) =============================
+
+==  ChangeDemoDayDescriptionToAttendees: migrating ============================
+-- rename_column(:demo_days, :description, :attendee_ids)
+   -> 0.0029s
+==  ChangeDemoDayDescriptionToAttendees: migrated (0.0036s) ===================
+
+==  AddIndexToVideoAndQuestions: migrating ====================================
+-- add_index(:questions, [:startup_id, :answered_at, :updated_at], {:name=>"startup_answered_updated", :unique=>true})
+   -> 0.0736s
+-- add_index(:videos, [:external_id, :type], {:unique=>true})
+   -> 0.0083s
+==  AddIndexToVideoAndQuestions: migrated (0.0828s) ===========================
+
+==  CreateWeeklyClasses: migrating ============================================
+-- add_column(:users, :weekly_class_id, :integer)
+   -> 0.0028s
+-- add_column(:users, :country, :string)
+   -> 0.0017s
+-- add_index(:users, :weekly_class_id)
+   -> 0.0272s
+-- create_table(:weekly_classes)
+NOTICE:  CREATE TABLE will create implicit sequence "weekly_classes_id_seq" for serial column "weekly_classes.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "weekly_classes_pkey" for table "weekly_classes"
+   -> 0.0558s
+-- add_index(:weekly_classes, :week, {:unique=>true})
+   -> 0.0233s
+==  CreateWeeklyClasses: migrated (0.1247s) ===================================
+
+==  AddWeeklyClassToInvites: migrating ========================================
+-- add_column(:invites, :weekly_class_id, :integer)
+   -> 0.0051s
+==  AddWeeklyClassToInvites: migrated (0.0057s) ===============================
+
+==  AddVideoIdsToDemoDay: migrating ===========================================
+-- add_column(:demo_days, :video_ids, :text)
+   -> 0.0027s
+==  AddVideoIdsToDemoDay: migrated (0.0039s) ==================================
+
+==  AddCachedTagFields: migrating =============================================
+-- add_column(:startups, :cached_industry_list, :string)
+   -> 0.0035s
+-- add_column(:users, :cached_skill_list, :string)
+   -> 0.0170s
+-- add_column(:users, :cached_industry_list, :string)
+   -> 0.0015s
+==  AddCachedTagFields: migrated (0.0535s) ====================================
+
+==  AddResponderIdsToComments: migrating ======================================
+-- add_column(:comments, :responder_ids, :text)
+   -> 0.0020s
+-- add_column(:comments, :deleted, :boolean, {:default=>false})
+   -> 0.0180s
+-- add_column(:comments, :startup_id, :integer)
+   -> 0.0015s
+-- add_column(:comments, :original_id, :integer)
+   -> 0.0631s
+-- remove_index(:comments, :checkin_id)
+   -> 0.0057s
+-- remove_index(:comments, :ancestry)
+   -> 0.0053s
+-- add_index(:comments, [:checkin_id, :ancestry])
+   -> 0.0081s
+-- add_index(:comments, [:startup_id, :created_at])
+   -> 0.0088s
+==  AddResponderIdsToComments: migrated (0.3053s) =============================
+
+==  AddCommentCount: migrating ================================================
+-- add_column(:comments, :reply_count, :integer, {:default=>0})
+   -> 0.0267s
+==  AddCommentCount: migrated (0.0269s) =======================================
+
+==  AddAccomplishedToCheckin: migrating =======================================
+-- add_column(:checkins, :accomplished, :boolean)
+   -> 0.0388s
+==  AddAccomplishedToCheckin: migrated (0.0392s) ==============================
+
+==  AddExternalUrlToVideos: migrating =========================================
+-- add_column(:videos, :external_url, :string)
+   -> 0.0018s
+==  AddExternalUrlToVideos: migrated (0.0020s) ================================
+
+==  AddMentorableToStartups: migrating ========================================
+-- add_column(:startups, :mentorable, :boolean, {:default=>false})
+   -> 0.0206s
+==  AddMentorableToStartups: migrated (0.0207s) ===============================
+
+==  AddTweetQuestionToQuestions: migrating ====================================
+-- add_column(:questions, :tweet, :boolean, {:default=>false})
+   -> 0.0150s
+==  AddTweetQuestionToQuestions: migrated (0.0152s) ===========================
+
+==  AddIndexOffsetToDemoDays: migrating =======================================
+-- add_column(:demo_days, :index_offset, :integer, {:default=>0})
+   -> 0.0112s
+==  AddIndexOffsetToDemoDays: migrated (0.0118s) ==============================
+
+==  AddDeltaToMeasurement: migrating ==========================================
+-- add_column(:measurements, :delta, :float)
+   -> 0.0020s
+==  AddDeltaToMeasurement: migrated (0.0025s) =================================
+
+==  AddEncodeCheckToVideos: migrating =========================================
+-- add_column(:videos, :ecc, :integer, {:default=>0})
+   -> 0.0234s
+==  AddEncodeCheckToVideos: migrated (0.0243s) ================================
+
+==  RemoveIndexOnVideos: migrating ============================================
+-- remove_index(:videos, [:external_id, :type])
+   -> 0.0067s
+-- add_index(:videos, [:external_id, :type])
+   -> 0.0074s
+==  RemoveIndexOnVideos: migrated (0.0146s) ===================================
+
+==  AddDataToRelationships: migrating =========================================
+-- add_column(:relationships, :initiated, :boolean, {:default=>false})
+   -> 0.0488s
+-- add_column(:relationships, :removed_at, :datetime)
+   -> 0.0016s
+==  AddDataToRelationships: migrated (0.0539s) ================================
+
+==  AddSessionIdToUserActions: migrating ======================================
+-- add_column(:user_actions, :session_id, :string)
+   -> 0.1012s
+==  AddSessionIdToUserActions: migrated (0.1017s) =============================
+
+==  CreateCalls: migrating ====================================================
+-- create_table(:calls)
+NOTICE:  CREATE TABLE will create implicit sequence "calls_id_seq" for serial column "calls.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "calls_pkey" for table "calls"
+   -> 0.0345s
+-- add_index(:calls, [:from_id, :created_at])
+   -> 0.0133s
+==  CreateCalls: migrated (0.0514s) ===========================================
+
+==  ChangeFieldsOnCalls: migrating ============================================
+-- remove_column(:calls, :from_sid)
+   -> 0.0022s
+-- rename_column(:calls, :to_sid, :sid)
+   -> 0.0014s
+==  ChangeFieldsOnCalls: migrated (0.0040s) ===================================
+
+==  SetStartupsAsConnectedAndAddActivatedAt: migrating ========================
+-- add_column(:startups, :activated_at, :datetime)
+   -> 0.0022s
+==  SetStartupsAsConnectedAndAddActivatedAt: migrated (0.0054s) ===============
+
+==  CreateAbTests: migrating ==================================================
+-- create_table(:ab_tests)
+NOTICE:  CREATE TABLE will create implicit sequence "ab_tests_id_seq" for serial column "ab_tests.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ab_tests_pkey" for table "ab_tests"
+   -> 0.0138s
+==  CreateAbTests: migrated (0.0140s) =========================================
+
+==  AddAbTestToUserActions: migrating =========================================
+-- add_column(:user_actions, :ab_test_id, :integer)
+   -> 0.0018s
+-- add_column(:user_actions, :ab_test_version, :string)
+   -> 0.0013s
+==  AddAbTestToUserActions: migrated (0.0042s) ================================
+
+==  CreateConversations: migrating ============================================
+-- drop_table(:messages)
+   -> 0.0027s
+-- create_table(:messages)
+NOTICE:  CREATE TABLE will create implicit sequence "messages_id_seq" for serial column "messages.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "messages_pkey" for table "messages"
+   -> 0.0368s
+-- add_index(:messages, [:conversation_id, :created_at], {:name=>"messages_conversation_created"})
+   -> 0.0108s
+-- create_table(:conversations)
+NOTICE:  CREATE TABLE will create implicit sequence "conversations_id_seq" for serial column "conversations.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "conversations_pkey" for table "conversations"
+   -> 0.0082s
+==  CreateConversations: migrated (0.0702s) ===================================
+
+==  CreateConversationStatuses: migrating =====================================
+-- create_table(:conversation_statuses)
+NOTICE:  CREATE TABLE will create implicit sequence "conversation_statuses_id_seq" for serial column "conversation_statuses.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "conversation_statuses_pkey" for table "conversation_statuses"
+   -> 0.0412s
+-- add_index(:conversation_statuses, [:user_id, :read_at, :folder], {:name=>"conv_status_user_read_folder"})
+   -> 0.0089s
+==  CreateConversationStatuses: migrated (0.0513s) ============================
+
+==  AddLastMessageToConversation: migrating ===================================
+-- add_column(:conversations, :latest_message_id, :integer)
+   -> 0.0265s
+==  AddLastMessageToConversation: migrated (0.0273s) ==========================
+
+==  AddSeenAtForMessages: migrating ===========================================
+-- add_column(:conversation_statuses, :seen_at, :datetime)
+   -> 0.0029s
+-- add_column(:relationships, :seen_by, :string)
+   -> 0.0018s
+==  AddSeenAtForMessages: migrated (0.0065s) ==================================
+
+==  ModifyForNewCheckinFormat: migrating ======================================
+-- add_column(:startups, :time_zone, :string)
+   -> 0.0039s
+-- add_column(:startups, :checkin_day, :integer)
+   -> 0.0072s
+-- rename_column(:checkins, :after_video_id, :video_id)
+   -> 0.0029s
+-- rename_column(:checkins, :end_comments, :notes)
+   -> 0.0020s
+-- rename_column(:checkins, :start_focus, :goal)
+   -> 0.0448s
+==  ModifyForNewCheckinFormat: migrated (0.0653s) =============================
+
+==  AddNextWeekGoalToCheckin: migrating =======================================
+-- add_column(:checkins, :next_week_goal, :string)
+   -> 0.0032s
+==  AddNextWeekGoalToCheckin: migrated (0.0047s) ==============================
+
+==  AddStartupToConversation: migrating =======================================
+-- add_column(:conversations, :team_to_team, :boolean, {:default=>false})
+   -> 0.0077s
+==  AddStartupToConversation: migrated (0.0100s) ==============================
+
+==  CreateRequests: migrating =================================================
+-- create_table(:requests)
+NOTICE:  CREATE TABLE will create implicit sequence "requests_id_seq" for serial column "requests.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "requests_pkey" for table "requests"
+   -> 0.0199s
+-- add_index(:requests, :num)
+   -> 0.0414s
+==  CreateRequests: migrated (0.0620s) ========================================
+
+==  CreateResponses: migrating ================================================
+-- create_table(:responses)
+NOTICE:  CREATE TABLE will create implicit sequence "responses_id_seq" for serial column "responses.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "responses_pkey" for table "responses"
+   -> 0.0167s
+-- add_index(:responses, :request_id)
+   -> 0.0119s
+==  CreateResponses: migrated (0.0289s) =======================================
+
+==  CreateAccountTransactions: migrating ======================================
+-- create_table(:account_transactions)
+NOTICE:  CREATE TABLE will create implicit sequence "account_transactions_id_seq" for serial column "account_transactions.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "account_transactions_pkey" for table "account_transactions"
+   -> 0.0189s
+-- add_index(:account_transactions, [:from_account_id, :to_account_id])
+   -> 0.0104s
+==  CreateAccountTransactions: migrated (0.0298s) =============================
+
+==  CreateAccounts: migrating =================================================
+-- create_table(:accounts)
+NOTICE:  CREATE TABLE will create implicit sequence "accounts_id_seq" for serial column "accounts.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "accounts_pkey" for table "accounts"
+   -> 0.0095s
+-- add_index(:accounts, [:owner_id, :owner_type], {:unique=>true})
+   -> 0.0085s
+==  CreateAccounts: migrated (0.0348s) ========================================
+
+==  CreatePayments: migrating =================================================
+-- create_table(:payments)
+NOTICE:  CREATE TABLE will create implicit sequence "payments_id_seq" for serial column "payments.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "payments_pkey" for table "payments"
+   -> 0.0115s
+-- add_index(:payments, :account_id)
+   -> 0.0083s
+-- add_column(:accounts, :stripe_customer_id, :string)
+   -> 0.0058s
+==  CreatePayments: migrated (0.0264s) ========================================
+
+==  AddTypeToRequests: migrating ==============================================
+-- add_column(:requests, :type, :string)
+   -> 0.0116s
+-- add_column(:responses, :tip, :integer, {:default=>0})
+   -> 0.0186s
+-- add_column(:responses, :video_id, :integer)
+   -> 0.0027s
+-- remove_column(:requests, :request_type)
+   -> 0.0026s
+==  AddTypeToRequests: migrated (0.1772s) =====================================
+
+** Invoke db:_dump (first_time)
+** Execute db:_dump
+** Invoke db:schema:dump (first_time)
+** Invoke environment 
+** Invoke db:load_config 
+** Execute db:schema:dump
