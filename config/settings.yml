@@ -6,11 +6,11 @@ staging:
   password: 'xxxxx'
 
 email_host: "localhost:3000"
-ssl_host: 'www.nreduce.com'
-joe_email: 'joe@nreduce.com'
+ssl_host: 'nreduce2.herokuapp.com'
+joe_email: 'gabrielaltomlin@rhyta.com'
 default_time_zone: "Pacific Time (US & Canada)"
-default_from_email: "nReduce <notifications@nreduce.com>"
-default_reply_to_email: "nReduce Support <support@nreduce.com>"
+default_from_email: "nReduce <gabrielaltomlin@rhyta.com>"
+default_reply_to_email: "nReduce Support <gabrielaltomlin@rhyta.com>"
 
 client:
   test: "test"
@@ -91,8 +91,8 @@ industries:
 
 apis:
   twitter:
-    consumer_key: "xxxxx"
-    consumer_secret: "xxxxx"
+    consumer_key: "03RGnKKXzBddPwvsyavlA"
+    consumer_secret: "8nitBOmUDoh8TdYSTrIJrK7rsexuGOOn8x87GyCK0"
     oauth_token: "xxxxx-xxxxx"
     oauth_token_secret: "xxxxx"
 
@@ -107,7 +107,7 @@ apis:
     token: "xxxxx"
 
   google:
-    key: "xxxxx"
+    key: "pz4uJ2MheiCIAHkcW_ZK_DaS"
 
   linkedin:
     key: 'xxxxx'
